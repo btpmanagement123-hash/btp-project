@@ -1,0 +1,94 @@
+// import SessionConfig from '../models/SessionConfig.js';
+// import User from '../models/User.js';
+
+// export const createSessionConfig = async (req, res) => {
+//   try {
+//     const sessionConfig = new SessionConfig(req.body);
+//     await sessionConfig.save();
+//     res.json({ success: true, sessionConfig });
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// };
+
+// export const getUsers = async (req, res) => {
+//   const users = await User.find({ isActive: true }).select('-password');
+//   res.json(users);
+// };
+import SessionConfig from '../models/SessionConfig.js';
+import User from '../models/User.js';
+
+export const createSessionConfig = async (req, res) => {
+  try {
+    const { session, semester, config } = req.body;
+
+    const doc = await SessionConfig.findOneAndUpdate(
+      { session, semester },
+      { session, semester, config, status: 'active' },
+      { upsert: true, new: true }
+    );
+
+    // optionally baaki sessions inactive karo
+    await SessionConfig.updateMany(
+      { _id: { $ne: doc._id } },
+      { $set: { status: 'inactive' } }
+    );
+
+    return res.json(doc);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+export const getActiveSession = async (req, res) => {
+  try {
+    const active = await SessionConfig.findOne({ status: 'active' });
+    if (!active) {
+      return res.status(404).json({ message: 'No active session' });
+    }
+    return res.json(active);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find({ isActive: true }).select('-password');
+    return res.json(users);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+export const listSessions = async (req, res) => {
+  try {
+    const sessions = await SessionConfig.find().sort({ createdAt: -1 });
+    return res.json(sessions);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+export const deleteSession = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sessionDoc = await SessionConfig.findById(id);
+    if (!sessionDoc) {
+      return res.status(404).json({ message: 'Session not found' });
+    }
+
+    // Option 1: sirf users soft delete for that session
+    await User.updateMany(
+      { session: sessionDoc.session },
+      { $set: { isActive: false } }
+    );
+
+    // Session inactive mark
+    sessionDoc.status = 'inactive';
+    await sessionDoc.save();
+
+    return res.json({ message: 'Session deactivated and users disabled' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
