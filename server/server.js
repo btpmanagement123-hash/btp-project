@@ -20,12 +20,24 @@ const app = express();
 // Middleware
 //app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 //app.options('/api/:path*', cors());
-app.use(cors({ 
-  origin: process.env.FRONTEND_URL,
+const allowedOrigins = [
+  'https://jade-scone-0c9752.netlify.app',
+  'http://localhost:3000'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // ye add karo
-  allowedHeaders: ['Content-Type', 'Authorization']     // ye add karo
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 // OPTIONS preflight explicitly handle karo (CORS ke PEHLE mat lagao)
  // sab routes ke OPTIONS ke liye
