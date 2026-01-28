@@ -19,10 +19,17 @@ const app = express();
 
 // Middleware
 //app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+//app.options('/api/:path*', cors());
 app.use(cors({ 
-  origin: process.env.FRONTEND_URL,  // sirf ye env var use karo
-  credentials: true
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // ye add karo
+  allowedHeaders: ['Content-Type', 'Authorization']     // ye add karo
 }));
+
+// OPTIONS preflight explicitly handle karo (CORS ke PEHLE mat lagao)
+ // sab routes ke OPTIONS ke liye
+
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
