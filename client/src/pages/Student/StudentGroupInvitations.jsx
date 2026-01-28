@@ -24,12 +24,12 @@ const StudentGroupInvitations = () => {
     load();
   }, []);
 
-  const myStatus = (req, myId) => {
-    const m = req.members.find(
-      (x) => String(x.student?._id) === String(myId)
-    );
-    return m?.status || 'pending';
-  };
+  // const myStatus = (req, myId) => {
+  //   const m = req.members.find(
+  //     (x) => String(x.student?._id) === String(myId)
+  //   );
+  //   return m?.status || 'pending';
+  // };
 
   const handleRespond = async (id, action) => {
     setActionId(id);
@@ -63,8 +63,8 @@ const StudentGroupInvitations = () => {
       <div style={styles.list}>
         {requests.map((r) => {
           const status = r.status; // overall status
-          const myId = r.members[0]?.student?._id; // backend se req.user._id bhi bhej sakte ho; simple ke liye yeh chhodo
-          // NOTE: realistically myId context se aayega; yahan UI focus hai
+          // const myId = r.members[0]?.student?._id; // backend se req.user._id bhi bhej sakte ho; simple ke liye yeh chhodo
+          // // NOTE: realistically myId context se aayega; yahan UI focus hai
 
           return (
             <div key={r._id} style={styles.card}>
