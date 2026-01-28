@@ -92,3 +92,40 @@ export const deleteSession = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+export const getAdminStats = async (req, res) => {
+  try {
+    const active = await SessionConfig.findOne({ status: 'active' });
+
+    if (!active) {
+      return res.json({
+        students: 0,
+        faculty: 0,
+        session: null
+      });
+    }
+
+    const session = active.session;
+
+    const students = await User.countDocuments({
+      role: 'student',
+      session,
+      isActive: true
+    });
+
+    const faculty = await User.countDocuments({
+      role: 'professor',
+      session,
+      isActive: true
+    });
+
+    return res.json({
+      students,
+      faculty,
+      session
+    });
+  } catch (err) {
+    console.error("ADMIN STATS ERROR:", err);
+    return res.status(500).json({ message: "Failed to load admin stats" });
+  }
+};

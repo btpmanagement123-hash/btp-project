@@ -83,7 +83,8 @@ import {
   getUsers,
   getActiveSession,
   listSessions,
-  deleteSession
+  deleteSession,
+  getAdminStats
 } from '../controllers/adminController.js';
 import {
   uploadStudents,
@@ -100,6 +101,8 @@ router.use(protect, authorize('admin'));
 router.post('/notifications', createNotification);
 
 router.get('/active-session', getActiveSession);
+router.get('/stats', getAdminStats);
+
 
 router.post('/upload-students', upload.single('excel'), uploadStudents);
 router.post('/upload-faculty', upload.single('excel'), uploadFaculty);
