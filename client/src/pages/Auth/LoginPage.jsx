@@ -834,9 +834,7 @@ const LoginPage = () => {
       });
 
       // save token + user
-      //login(res.data);
-      login(res.data.token, res.data.user);
-
+      login(res.data);
 
       const { role, mustChangePassword } = res.data.user;
 
