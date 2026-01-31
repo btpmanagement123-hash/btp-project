@@ -22,7 +22,8 @@ const app = express();
 //app.options('/api/:path*', cors());
 const allowedOrigins = [
   'https://jade-scone-0c9752.netlify.app',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://btp-project-kohl.vercel.app'
 ];
 
 app.use(cors({
