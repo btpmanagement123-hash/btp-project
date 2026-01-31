@@ -17,28 +17,88 @@
 // };
 import SessionConfig from '../models/SessionConfig.js';
 import User from '../models/User.js';
+// import { getCurrentSemester } from '../utils/getSemester.js';
+import { getSemesterFromDates } from '../utils/semesterEngine.js';
 
+// export const createSessionConfig = async (req, res) => {
+//   try {
+//    // const { session, semester, config } = req.body;
+  
+
+// const { session, config } = req.body;
+// const semester = getCurrentSemester();
+
+
+//     const doc = await SessionConfig.findOneAndUpdate(
+//       { session, semester },
+//       { session, semester, config, status: 'active' },
+//       { upsert: true, new: true }
+//     );
+
+//     // optionally baaki sessions inactive karo
+//     await SessionConfig.updateMany(
+//       { _id: { $ne: doc._id } },
+//       { $set: { status: 'inactive' } }
+//     );
+
+//     return res.json(doc);
+//   } catch (err) {
+//     return res.status(500).json({ message: err.message });
+//   }
+// };
+
+// export const getActiveSession = async (req, res) => {
+//   try {
+//     const active = await SessionConfig.findOne({ status: 'active' });
+//     if (!active) {
+//       return res.status(404).json({ message: 'No active session' });
+//     }
+//     return res.json(active);
+//   } catch (err) {
+//     return res.status(500).json({ message: err.message });
+//   }
+// };
 export const createSessionConfig = async (req, res) => {
   try {
-    const { session, semester, config } = req.body;
+    const { session, config } = req.body;
 
+    // 🔍 Pehle existing session config nikaalo
+    const existing = await SessionConfig.findOne({ session });
+
+    // 🔀 Merge old + new config safely
+    const mergedConfig = {
+      ...(existing?.config || {}),
+      ...(config || {})
+    };
+
+    // 🧠 Semester dates se auto-detect
+    const semester = getSemesterFromDates(mergedConfig);
+
+    // 💾 Save merged config
     const doc = await SessionConfig.findOneAndUpdate(
-      { session, semester },
-      { session, semester, config, status: 'active' },
+      { session },
+      {
+        session,
+        semester,
+        config: mergedConfig,
+        status: 'active'
+      },
       { upsert: true, new: true }
     );
 
-    // optionally baaki sessions inactive karo
+    // ❌ Baaki sessions inactive
     await SessionConfig.updateMany(
       { _id: { $ne: doc._id } },
       { $set: { status: 'inactive' } }
     );
 
-    return res.json(doc);
+    res.json(doc);
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    console.error('createSessionConfig error:', err);
+    res.status(500).json({ message: err.message });
   }
 };
+
 
 export const getActiveSession = async (req, res) => {
   try {
@@ -46,12 +106,18 @@ export const getActiveSession = async (req, res) => {
     if (!active) {
       return res.status(404).json({ message: 'No active session' });
     }
-    return res.json(active);
+
+    const liveSemester = getSemesterFromDates(active.config);
+
+    res.json({
+      session: active.session,
+      semester: liveSemester,
+      config: active.config
+    });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
-
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find({ isActive: true }).select('-password');

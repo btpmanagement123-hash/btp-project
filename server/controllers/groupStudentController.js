@@ -158,49 +158,214 @@ export const getAvailableProfessors = async (req, res) => {
   );
 };
 
+// export const createGroupRequest = async (req, res) => {
+//   const user = req.user;
+//   const { members, professorId, title } = req.body;
+//   // members: [{roll, name}] including leader (frontend se aayega)
+
+//   if (!professorId || !members?.length) {
+//     return res.status(400).json({ message: 'Members and professor required' });
+//   }
+
+//   // roll numbers se users nikaal lo
+//   const rolls = [...new Set(members.map((m) => m.roll))];
+
+//   const students = await User.find({
+//     role: 'student',
+//     userId: { $in: rolls },
+//     session: user.session
+//   });
+
+//   const idByRoll = new Map(students.map((s) => [s.userId, String(s._id)]));
+
+//   const memberDocs = [];
+//   for (const m of members) {
+//     const sid = idByRoll.get(m.roll);
+//     if (!sid) {
+//       return res
+//         .status(400)
+//         .json({ message: `Student not found: ${m.roll}` });
+//     }
+//     memberDocs.push({
+//       student: sid,
+//       status: sid === String(user._id) ? 'accepted' : 'pending'
+//     });
+//   }
+
+//   const doc = await GroupRequest.create({
+//     session: user.session,
+//     leader: user._id,
+//     professor: professorId,
+//     title,
+//     members: memberDocs
+//   });
+
+//   res.status(201).json(doc);
+// };
 export const createGroupRequest = async (req, res) => {
-  const user = req.user;
-  const { members, professorId, title } = req.body;
-  // members: [{roll, name}] including leader (frontend se aayega)
+  try {
+    const user = req.user;
+    const { members, professorId, title } = req.body;
 
-  if (!professorId || !members?.length) {
-    return res.status(400).json({ message: 'Members and professor required' });
-  }
-
-  // roll numbers se users nikaal lo
-  const rolls = [...new Set(members.map((m) => m.roll))];
-
-  const students = await User.find({
-    role: 'student',
-    userId: { $in: rolls },
-    session: user.session
-  });
-
-  const idByRoll = new Map(students.map((s) => [s.userId, String(s._id)]));
-
-  const memberDocs = [];
-  for (const m of members) {
-    const sid = idByRoll.get(m.roll);
-    if (!sid) {
-      return res
-        .status(400)
-        .json({ message: `Student not found: ${m.roll}` });
+    if (!professorId || !members?.length) {
+      return res.status(400).json({
+        message: 'Members and professor required'
+      });
     }
-    memberDocs.push({
-      student: sid,
-      status: sid === String(user._id) ? 'accepted' : 'pending'
+
+    // 🧠 SAFETY: Ensure session exists
+    let session = user.session;
+    if (!session) {
+      const active = await SessionConfig.findOne({
+        status: 'active'
+      });
+      if (!active) {
+        return res.status(403).json({
+          message: 'No active academic session found'
+        });
+      }
+      session = active.session;
+    }
+
+    // 🔒 LOAD ACTIVE SESSION CONFIG
+    const cfg = await SessionConfig.findOne({
+      session,
+      status: 'active'
+    });
+
+    if (!cfg || !cfg.config) {
+      return res.status(403).json({
+        message: 'BTP is not configured by admin yet'
+      });
+    }
+
+    // ⏰ DEADLINE CHECK
+    if (cfg.config.registrationDeadline) {
+      const now = new Date();
+      const deadline = new Date(
+        cfg.config.registrationDeadline
+      );
+
+      if (now > deadline) {
+        return res.status(403).json({
+          message: 'BTP registration deadline has passed'
+        });
+      }
+    }
+
+    // 📏 GROUP SIZE LIMITS
+    const minSize = cfg.config.minGroupSize || 1;
+    const maxSize = cfg.config.maxGroupSize || 4;
+
+    if (members.length < minSize || members.length > maxSize) {
+      return res.status(400).json({
+        message: `Group must have between ${minSize} and ${maxSize} members`
+      });
+    }
+
+    // 🔁 DUPLICATE CHECK (IN PAYLOAD)
+    const rollsRaw = members.map((m) => m.roll?.trim());
+    const uniqueRolls = new Set(rollsRaw);
+
+    if (uniqueRolls.size !== rollsRaw.length) {
+      return res.status(400).json({
+        message:
+          'Duplicate roll numbers found in group members'
+      });
+    }
+
+    // 🔎 FETCH STUDENTS
+    const students = await User.find({
+      role: 'student',
+      userId: { $in: [...uniqueRolls] },
+      session,
+      isActive: true
+    });
+
+    if (students.length !== uniqueRolls.size) {
+      return res.status(400).json({
+        message:
+          'One or more roll numbers are invalid for this session'
+      });
+    }
+
+    const idByRoll = new Map(
+      students.map((s) => [
+        s.userId,
+        String(s._id)
+      ])
+    );
+
+    // 🧩 BUILD MEMBER DOCS
+    const memberDocs = [];
+    for (const m of members) {
+      const sid = idByRoll.get(m.roll);
+
+      if (!sid) {
+        return res.status(400).json({
+          message: `Student not found: ${m.roll}`
+        });
+      }
+
+      memberDocs.push({
+        student: sid,
+        status:
+          sid === String(user._id)
+            ? 'accepted'
+            : 'pending'
+      });
+    }
+
+    // 🚫 PREVENT MULTIPLE GROUPS BY SAME STUDENT
+    const existing = await GroupRequest.findOne({
+      session,
+      'members.student': user._id
+    });
+
+    if (existing) {
+      return res.status(400).json({
+        message:
+          'You are already part of another group request'
+      });
+    }
+
+    // 🧑‍🏫 PROFESSOR LIMIT CHECK
+    const currentGroups =
+      await ProjectGroup.countDocuments({
+        supervisor: professorId,
+        session
+      });
+
+    const maxGroupsPerProfessor =
+      cfg.config.maxGroupsPerProfessor || 10;
+
+    if (currentGroups >= maxGroupsPerProfessor) {
+      return res.status(400).json({
+        message:
+          'Selected professor has reached max group limit'
+      });
+    }
+
+    // ✅ CREATE GROUP REQUEST
+    const doc = await GroupRequest.create({
+      session,
+      leader: user._id,
+      professor: professorId,
+      title,
+      members: memberDocs,
+      status: 'pending_members'
+    });
+
+    return res.status(201).json(doc);
+  } catch (err) {
+    console.error(
+      'createGroupRequest error:',
+      err
+    );
+    return res.status(500).json({
+      message: 'Failed to create group request'
     });
   }
-
-  const doc = await GroupRequest.create({
-    session: user.session,
-    leader: user._id,
-    professor: professorId,
-    title,
-    members: memberDocs
-  });
-
-  res.status(201).json(doc);
 };
 
 export const getMyGroupRequests = async (req, res) => {
@@ -218,37 +383,113 @@ export const getMyGroupRequests = async (req, res) => {
 
 
 // server/controllers/groupStudentController.js
+// export const respondToGroupRequest = async (req, res) => {
+//   const user = req.user;
+//   const { id } = req.params;
+//   const { action } = req.body; // 'accept' | 'reject'
+
+//   const doc = await GroupRequest.findById(id);
+//   if (!doc) return res.status(404).json({ message: 'Request not found' });
+
+//   const m = doc.members.find(
+//     (m) => String(m.student) === String(user._id)
+//   );
+//   if (!m) return res.status(400).json({ message: 'You are not in this request' });
+//   if (m.status !== 'pending') return res.json(doc);
+
+//   m.status = action === 'accept' ? 'accepted' : 'rejected';
+
+//   const allAccepted = doc.members.every((m) => m.status === 'accepted');
+//   const anyRejected = doc.members.some((m) => m.status === 'rejected');
+
+//   if (anyRejected) {
+//     doc.status = 'rejected';
+//     await doc.save();
+//     // agar puri request hi hataani hai:
+//     // await GroupRequest.findByIdAndDelete(id);
+//     return res.json(doc);
+//   }
+
+//   if (allAccepted) {
+//     doc.status = 'pending_professor';
+//   }
+
+//   await doc.save();
+//   res.json(doc);
+// };
 export const respondToGroupRequest = async (req, res) => {
-  const user = req.user;
-  const { id } = req.params;
-  const { action } = req.body; // 'accept' | 'reject'
+  try {
+    const user = req.user;
+    const { id } = req.params;
+    let { action } = req.body; // "accept" | "reject"
 
-  const doc = await GroupRequest.findById(id);
-  if (!doc) return res.status(404).json({ message: 'Request not found' });
+    if (!action) {
+      return res.status(400).json({
+        message: 'Action is required (accept or reject)'
+      });
+    }
 
-  const m = doc.members.find(
-    (m) => String(m.student) === String(user._id)
-  );
-  if (!m) return res.status(400).json({ message: 'You are not in this request' });
-  if (m.status !== 'pending') return res.json(doc);
+    // 🛡️ Normalize input (ACCEPT, accepted, Accept → accept)
+    action = action.toString().trim().toLowerCase();
+    if (action === 'accepted') action = 'accept';
+    if (action === 'rejected') action = 'reject';
 
-  m.status = action === 'accept' ? 'accepted' : 'rejected';
+    if (!['accept', 'reject'].includes(action)) {
+      return res.status(400).json({
+        message: 'Invalid action. Use accept or reject'
+      });
+    }
 
-  const allAccepted = doc.members.every((m) => m.status === 'accepted');
-  const anyRejected = doc.members.some((m) => m.status === 'rejected');
+    const doc = await GroupRequest.findById(id);
+    if (!doc) {
+      return res
+        .status(404)
+        .json({ message: 'Request not found' });
+    }
 
-  if (anyRejected) {
-    doc.status = 'rejected';
+    const m = doc.members.find(
+      (m) => String(m.student) === String(user._id)
+    );
+
+    if (!m) {
+      return res
+        .status(400)
+        .json({ message: 'You are not in this request' });
+    }
+
+    if (m.status !== 'pending') {
+      return res.json(doc);
+    }
+
+    // ✅ SET MEMBER STATUS
+    m.status =
+      action === 'accept' ? 'accepted' : 'rejected';
+
+    const allAccepted = doc.members.every(
+      (m) => m.status === 'accepted'
+    );
+    const anyRejected = doc.members.some(
+      (m) => m.status === 'rejected'
+    );
+
+    // ❌ IF ANY MEMBER REJECTS → FULL GROUP REJECTED
+    if (anyRejected) {
+      doc.status = 'rejected';
+      await doc.save();
+      return res.json(doc);
+    }
+
+    // ⏳ IF ALL ACCEPTED → WAIT FOR PROFESSOR
+    if (allAccepted) {
+      doc.status = 'pending_professor';
+    }
+
     await doc.save();
-    // agar puri request hi hataani hai:
-    // await GroupRequest.findByIdAndDelete(id);
     return res.json(doc);
+  } catch (err) {
+    console.error('respondToGroupRequest error:', err);
+    return res.status(500).json({
+      message: 'Failed to respond to group request'
+    });
   }
-
-  if (allAccepted) {
-    doc.status = 'pending_professor';
-  }
-
-  await doc.save();
-  res.json(doc);
 };
