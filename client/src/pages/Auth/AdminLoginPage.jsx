@@ -123,6 +123,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 
 const AdminLoginPage = () => {
   const [form, setForm] = useState({
@@ -153,6 +155,8 @@ const AdminLoginPage = () => {
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div style={styles.page}>
       <div style={styles.cardWrapper}>
@@ -177,16 +181,24 @@ const AdminLoginPage = () => {
 
           <div style={styles.inputGroup}>
             <label style={styles.label}>Password</label>
-            <input
-              style={styles.input}
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-            />
-          </div>
 
+            <div style={styles.divGroupFull}>
+              <input
+                style={styles.input}
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                style={styles.eyeicon}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
+          </div>
 
           <button type="submit" style={styles.button}>
             Sign in as Admin
@@ -316,8 +328,23 @@ const styles = {
     padding: '8px 10px',
     borderRadius: 10,
     background: 'rgba(127,29,29,0.25)',
-    border: '1px solid rgba(248,113,113,0.4)'
-  }
+    border: '1px solid rgba(248,113,113,0.4)',
+  },
+  eyeicon: {
+  position: "absolute",
+  right: "14px",
+  top: "49%",
+    transform: "translateY(-50%)",
+  cursor: "pointer",
+  color: "#9ca3af",
+  display: "flex",
+  alignItems: "center",
+  height: "100%",
+},
+divGroupFull : {
+  position:"relative",
+  width:"100%"
+},
 };
 
 export default AdminLoginPage;

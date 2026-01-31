@@ -529,7 +529,7 @@
 //               style={styles.logoSm}
 //             />
 //           </div>
-          
+
 //           <h2 style={styles.header}>
 //             Sign In to BTP Portal
 //           </h2>
@@ -620,11 +620,11 @@
 //     width: '100vw',
 //     fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
 //   },
-  
+
 //   // 🟢 LOGO PANE (MODIFIED)
 //   logoPaneLg: {
 //     // Occupies 33.33% of the width (1/3rd)
-//     flexBasis: '33.3333%', 
+//     flexBasis: '33.3333%',
 //     minWidth: '300px', // Ensures it looks good even if the viewport is huge
 //     backgroundColor: '#1f2937', // Dark background (gray-900)
 //     display: 'flex',
@@ -686,7 +686,7 @@
 //     height: 'auto',
 //     objectFit: 'contain',
 //   },
-  
+
 //   // --- Role Buttons ---
 //   roleButtonsWrapper: {
 //     display: 'flex',
@@ -737,7 +737,7 @@
 //     transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
 //     // Focus states would be added here via a CSS file
 //   },
-  
+
 //   // --- Error Message ---
 //   error: {
 //     fontSize: '14px',
@@ -785,6 +785,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
 import nsutLogo from '../../assets/nsut-logo.png';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -858,6 +859,8 @@ const LoginPage = () => {
     !password ||
     (selectedRole === 'Faculty' && !sessionYear);
 
+      const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div style={styles.page}>
       {/* Left logo pane */}
@@ -902,16 +905,23 @@ const LoginPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               style={styles.input}
             />
+            <div style={styles.divGroupFull}>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={styles.input}
             />
-
+             <span
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={styles.eyeicon}
+                          >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                          </span>
+</div>
             {/* Faculty session dropdown */}
-            {selectedRole === 'Faculty' && (
+            {selectedRole === "Faculty" && (
               <select
                 value={sessionYear}
                 onChange={(e) => setSessionYear(e.target.value)}
@@ -968,9 +978,9 @@ const styles = {
     padding: '48px'
   },
   logoLg: {
-    maxHeight: '100%',
-    maxWidth: '100%',
-    objectFit: 'contain'
+    maxHeight: "100%",
+    maxWidth: "100%",
+    objectFit: "contain",
   },
   loginPane: {
     flex: 1,
@@ -1076,17 +1086,32 @@ const styles = {
     boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.4)'
   },
   loginButtonDisabled: {
-    backgroundColor: '#e5e7eb',
-    color: '#9ca3af',
-    cursor: 'not-allowed',
-    boxShadow: 'none'
+    backgroundColor: "#e5e7eb",
+    color: "#9ca3af",
+    cursor: "not-allowed",
+    boxShadow: "none",
   },
   footer: {
     marginTop: 4,
     fontSize: '12px',
     textAlign: 'center',
-    color: '#9ca3af'
-  }
+    color: '#9ca3af',
+  },
+  eyeicon: {
+    position: "absolute",
+    right: "14px",
+    top: "49%",
+    transform: "translateY(-50%)",
+    cursor: "pointer",
+    color: "#9ca3af",
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
+  },
+  divGroupFull: {
+    position: "relative",
+    width: "100%",
+  },
 };
 
 export default LoginPage;
