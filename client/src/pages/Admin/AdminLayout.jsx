@@ -1,191 +1,43 @@
-// // src/pages/Admin/AdminLayout.jsx
-// import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-// import nsutLogo from '../../assets/nsut-logo.png';
-// import { useAuth } from '../../context/AuthContext';
-
-// const AdminLayout = () => {
-//   const { logout } = useAuth();
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     logout();
-//     navigate('/login');
-//   };
-
-//   return (
-//     <div style={styles.app}>
-//       <aside style={styles.sidebar}>
-//         <div style={styles.logoWrapper}>
-//           <img src={nsutLogo} alt="NSUT" style={styles.logo} />
-//         </div>
-//         <nav style={styles.nav}>
-//           <NavLink to="/admin/accounts" style={styles.navItem}>
-//             Accounts Centre
-//           </NavLink>
-//           <NavLink to="/admin/settings" style={styles.navItem}>
-//             Settings and Setup
-//           </NavLink><NavLink to="/admin/notifications" style={styles.navItem}>
-//     Notifications
-//   </NavLink>
-
-          
-//         </nav>
-//       </aside>
-
-//       <div style={styles.main}>
-//         <header style={styles.header}>
-         
-//           <button onClick={handleLogout} style={styles.logoutBtn}>
-//             Logout
-//           </button>
-//         </header>
-//         <main style={styles.content}>
-//           <Outlet />
-//         </main>
-//       </div>
-//     </div>
-//   );
-// };
-
-// const styles = {
-//   app: { display: 'flex', minHeight: '100vh', background: '#f3f4f6' },
-//   sidebar: {
-//     width: 220,
-//     background: '#020617',
-//     color: '#e5e7eb',
-//     display: 'flex',
-//     flexDirection: 'column'
-//   },
-//   logoWrapper: {
-//     height: 64,
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     borderBottom: '1px solid #111827'
-//   },
-//   logo: { height: 44, width: 44, objectFit: 'contain', borderRadius: '50%' },
-//   nav: { marginTop: 8, display: 'flex', flexDirection: 'column' },
-//   navItem: ({ isActive }) => ({
-//     padding: '10px 18px',
-//     color: '#e5e7eb',
-//     fontSize: 14,
-//     textDecoration: 'none',
-//     background: isActive ? '#111827' : 'transparent'
-//   }),
-//   main: { flex: 1, display: 'flex', flexDirection: 'column' },
-//   header: {
-//     height: 64,
-//     background: '#ffffff',
-//     borderBottom: '1px solid #e5e7eb',
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'space-between',
-//     padding: '0 24px'
-//   },
-//   search: {
-//     flex: 1,
-//     maxWidth: 500,
-//     padding: '8px 12px',
-//     borderRadius: 999,
-//     border: '1px solid #e5e7eb',
-//     fontSize: 14
-//   },
-//   logoutBtn: {
-//     marginLeft: 16,
-//     padding: '8px 18px',
-//     background: '#ef4444',
-//     borderRadius: 999,
-//     border: 'none',
-//     color: '#fff',
-//     fontWeight: 600,
-//     cursor: 'pointer'
-//   },
-//   content: {
-//     padding: '20px 24px 32px',
-//     overflowY: 'auto'
-//   }
-// };
-
-// export default AdminLayout;
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import nsutLogo from "../../assets/nsut-logo.png";
-import { useAuth } from "../../context/AuthContext";
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import nsutLogo from '../../assets/nsutlogo.png';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminLayout = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate('/login');
   };
 
   return (
     <div style={styles.app}>
-      {/* OVERLAY FOR MOBILE */}
-      {sidebarOpen && (
-        <div
-          style={styles.overlay}
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* SIDEBAR */}
-      <aside
-        style={{
-          ...styles.sidebar,
-          ...(sidebarOpen ? styles.sidebarMobileOpen : {})
-        }}
-      >
+      <aside style={styles.sidebar}>
         <div style={styles.logoWrapper}>
-          <img src={nsutLogo} style={styles.logo} alt="logo" />
+          <img src={nsutLogo} alt="NSUT" style={styles.logo} />
         </div>
-
         <nav style={styles.nav}>
-          <NavLink
-            to="/admin/accounts"
-            style={styles.navItem}
-            onClick={() => setSidebarOpen(false)}
-          >
+          <NavLink to="/admin/accounts" style={styles.navItem}>
             Accounts Centre
           </NavLink>
-
-          <NavLink
-            to="/admin/settings"
-            style={styles.navItem}
-            onClick={() => setSidebarOpen(false)}
-          >
+          <NavLink to="/admin/settings" style={styles.navItem}>
             Settings and Setup
-          </NavLink>
+          </NavLink><NavLink to="/admin/notifications" style={styles.navItem}>
+    Notifications
+  </NavLink>
 
-          <NavLink
-            to="/admin/notifications"
-            style={styles.navItem}
-            onClick={() => setSidebarOpen(false)}
-          >
-            Notifications
-          </NavLink>
+          
         </nav>
       </aside>
 
-      {/* MAIN SECTION */}
       <div style={styles.main}>
         <header style={styles.header}>
-          {/* HAMBURGER BUTTON */}
-          <button
-            style={styles.menuBtn}
-            onClick={() => setSidebarOpen(true)}
-          >
-            ☰
-          </button>
-
-          <button style={styles.logoutBtn} onClick={handleLogout}>
+         
+          <button onClick={handleLogout} style={styles.logoutBtn}>
             Logout
           </button>
         </header>
-
         <main style={styles.content}>
           <Outlet />
         </main>
@@ -195,107 +47,88 @@ const AdminLayout = () => {
 };
 
 const styles = {
-  app: {
-    display: "flex",
-    minHeight: "100vh",
-    background: "#f3f4f6"
+  app: { 
+    display: 'flex', 
+    minHeight: '100vh', 
+    background: '#f8fafc', // Slightly cooler light gray
+    fontFamily: '"Inter", system-ui, sans-serif'
   },
-
-  /* SIDEBAR */
   sidebar: {
-    width: 220,
-    background: "#020617",
-    color: "#e5e7eb",
-    display: "flex",
-    flexDirection: "column",
-
-    /* MOBILE DEFAULT HIDDEN */
-    position: "fixed",
-    left: 0,
-    top: 0,
-    bottom: 0,
-    transform: "translateX(-100%)",
-    transition: "0.3s",
-    zIndex: 1000
+    width: 260, // Widened slightly for better text breathing room
+    background: '#0f172a', // Deep Slate 900
+    color: '#f1f5f9',
+    display: 'flex',
+    flexDirection: 'column',
+    boxShadow: '4px 0 10px rgba(0,0,0,0.05)',
+    zIndex: 10
   },
-
-  sidebarMobileOpen: {
-    transform: "translateX(0)"
-  },
-
   logoWrapper: {
-    height: 64,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderBottom: "1px solid #111827"
+    height: 80,
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 24px',
+    borderBottom: '1px solid #1e293b'
   },
-
-  logo: {
-    height: 44,
-    width: 44,
-    borderRadius: "50%"
+  logo: { 
+    height: 48, 
+    width: 48, 
+    objectFit: 'contain', 
+    borderRadius: '12px', // Modern squircle look
+    backgroundColor: '#fff',
+    padding: '4px'
   },
-
-  nav: {
-    marginTop: 8,
-    display: "flex",
-    flexDirection: "column"
+  nav: { 
+    marginTop: '16px', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    gap: '4px',
+    padding: '0 12px' 
   },
-
   navItem: ({ isActive }) => ({
-    padding: "12px 18px",
-    color: "#e5e7eb",
-    textDecoration: "none",
-    background: isActive ? "#111827" : "transparent"
+    padding: '12px 16px',
+    color: isActive ? '#fff' : '#94a3b8',
+    fontSize: '14px',
+    fontWeight: isActive ? '600' : '500',
+    textDecoration: 'none',
+    borderRadius: '8px',
+    background: isActive ? '#1e293b' : 'transparent',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
   }),
-
-  /* MAIN */
-  main: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    width: "100%"
+  main: { 
+    flex: 1, 
+    display: 'flex', 
+    flexDirection: 'column',
+    height: '100vh',
+    overflow: 'hidden' 
   },
-
   header: {
-    height: 64,
-    background: "#fff",
-    borderBottom: "1px solid #e5e7eb",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "0 20px"
+    height: 72,
+    background: 'rgba(255, 255, 255, 0.8)',
+    backdropFilter: 'blur(8px)', // Modern glass effect
+    borderBottom: '1px solid #e2e8f0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Aligned to end since search was removed
+    padding: '0 32px',
+    zIndex: 9
   },
-
-  /* MOBILE MENU BUTTON */
-  menuBtn: {
-    fontSize: 22,
-    background: "transparent",
-    border: "none",
-    cursor: "pointer"
-  },
-
   logoutBtn: {
-    padding: "8px 18px",
-    background: "#ef4444",
-    borderRadius: 999,
-    border: "none",
-    color: "#fff",
-    fontWeight: 600,
-    cursor: "pointer"
+    padding: '10px 20px',
+    background: '#fee2e2', // Light red background
+    color: '#dc2626', // Bold red text
+    borderRadius: '10px',
+    border: 'none',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'background 0.2s ease'
   },
-
   content: {
-    padding: "20px",
-    overflowY: "auto"
-  },
-
-  overlay: {
-    position: "fixed",
-    inset: 0,
-    background: "rgba(0,0,0,0.4)",
-    zIndex: 999
+    padding: '32px',
+    overflowY: 'auto',
+    flex: 1
   }
 };
 

@@ -202,72 +202,127 @@ const StudentProjectRegistration = () => {
 };
 
 const styles = {
-  title: { fontSize: 22, fontWeight: 700, marginBottom: 16 },
+  title: { 
+    fontSize: '26px', 
+    fontWeight: '800', 
+    marginBottom: '24px', 
+    color: '#0f172a',
+    letterSpacing: '-0.025em'
+  },
   card: {
     background: '#ffffff',
-    borderRadius: 18,
-    padding: 18,
-    marginBottom: 16,
-    boxShadow: '0 10px 30px rgba(15,23,42,0.06)'
+    borderRadius: '16px',
+    padding: '24px',
+    marginBottom: '20px',
+    border: '1px solid #f1f5f9',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03)'
   },
-  cardTitle: { fontSize: 15, fontWeight: 600, marginBottom: 10 },
+  cardTitle: { 
+    fontSize: '16px', 
+    fontWeight: '700', 
+    marginBottom: '16px', 
+    color: '#334155',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+  },
   cardHeader: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'baseline',
-    marginBottom: 10
+    alignItems: 'center',
+    marginBottom: '20px',
+    paddingBottom: '12px',
+    borderBottom: '1px solid #f8fafc'
   },
-  smallMuted: { fontSize: 12, color: '#9ca3af' },
+  smallMuted: { 
+    fontSize: '12px', 
+    color: '#64748b',
+    backgroundColor: '#f1f5f9',
+    padding: '4px 10px',
+    borderRadius: '6px'
+  },
   row: {
     display: 'flex',
     justifyContent: 'space-between',
-    fontSize: 13,
-    padding: '6px 0',
-    borderBottom: '1px dashed #e5e7eb'
+    fontSize: '14px',
+    padding: '10px 0',
+    borderBottom: '1px solid #f8fafc'
   },
-  label: { color: '#6b7280' },
-  value: { color: '#111827', fontWeight: 500 },
+  label: { color: '#94a3b8', fontWeight: '500' },
+  value: { color: '#1e293b', fontWeight: '600' },
   memberRow: {
     display: 'flex',
-    gap: 12,
-    marginBottom: 10
+    gap: '16px',
+    marginBottom: '16px',
+    padding: '16px',
+    background: '#f8fafc',
+    borderRadius: '12px',
+    border: '1px solid #eff6ff'
   },
   fieldLabel: {
-    fontSize: 12,
-    color: '#6b7280',
-    marginBottom: 4,
-    display: 'block'
+    fontSize: '12px',
+    fontWeight: '700',
+    color: '#475569',
+    marginBottom: '6px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.025em'
   },
   input: {
     width: '100%',
-    padding: '9px 11px',
-    borderRadius: 10,
-    border: '1px solid #d1d5db',
-    fontSize: 14
+    padding: '11px 14px',
+    borderRadius: '10px',
+    border: '1px solid #e2e8f0',
+    fontSize: '14px',
+    backgroundColor: '#ffffff',
+    color: '#1e293b',
+    transition: 'all 0.2s ease',
+    outline: 'none',
+    boxSizing: 'border-box'
   },
   addBtn: {
-    marginTop: 6,
-    padding: '8px 10px',
-    borderRadius: 999,
-    border: '1px dashed #4f46e5',
-    background: '#eef2ff',
-    color: '#4f46e5',
-    fontSize: 13,
-    cursor: 'pointer'
-  },
-  error: { fontSize: 13, color: '#dc2626', marginTop: 6 },
-  success: { fontSize: 13, color: '#16a34a', marginTop: 6 },
-  submitBtn: {
-    marginTop: 8,
-    padding: '10px 0',
+    marginTop: '8px',
+    padding: '10px 16px',
+    borderRadius: '10px',
+    border: '2px dashed #cbd5e1',
+    background: 'transparent',
+    color: '#6366f1',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
     width: '100%',
-    maxWidth: 360,
-    borderRadius: 999,
+    transition: 'all 0.2s ease'
+  },
+  error: { 
+    fontSize: '14px', 
+    color: '#ef4444', 
+    backgroundColor: '#fef2f2', 
+    padding: '12px', 
+    borderRadius: '10px',
+    borderLeft: '4px solid #ef4444',
+    marginBottom: '16px'
+  },
+  success: { 
+    fontSize: '14px', 
+    color: '#10b981', 
+    backgroundColor: '#f0fdf4', 
+    padding: '12px', 
+    borderRadius: '10px', 
+    borderLeft: '4px solid #10b981',
+    marginBottom: '16px'
+  },
+  submitBtn: {
+    marginTop: '12px',
+    padding: '14px 28px',
+    borderRadius: '12px',
     border: 'none',
-    background: '#22c55e',
+    background: '#4f46e5',
     color: '#ffffff',
-    fontWeight: 600,
-    cursor: 'pointer'
+    fontWeight: '700',
+    fontSize: '16px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.3)',
+    width: '100%'
   }
 };
 
