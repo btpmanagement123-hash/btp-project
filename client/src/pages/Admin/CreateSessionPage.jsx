@@ -183,106 +183,118 @@ const CreateSessionPage = () => {
   );
 };
 
-// 🎨 STYLES (RESPONSIVE + CLEAN ADMIN UI)
 const styles = {
   page: {
-    maxWidth: 700,
-    margin: "0 auto",
-    padding: "16px"
+    maxWidth: '750px',
+    margin: '0 auto',
+    padding: '24px 16px'
   },
-
   wrapper: {
-    background: "#ffffff",
-    borderRadius: 18,
-    padding: "24px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.06)"
+    background: '#ffffff',
+    borderRadius: '24px',
+    padding: '40px',
+    boxShadow: '0 4px 25px rgba(0, 0, 0, 0.04)',
+    border: '1px solid #f1f5f9'
   },
-
   title: {
-    fontSize: 20,
-    fontWeight: 700,
-    marginBottom: 10,
-    textAlign: "center"
+    fontSize: '24px',
+    fontWeight: '700',
+    marginBottom: '8px',
+    textAlign: 'center',
+    color: '#0f172a',
+    letterSpacing: '-0.02em'
   },
-
   semesterBadge: {
-    textAlign: "center",
-    fontSize: 13,
-    marginBottom: 18,
-    color: "#374151"
+    textAlign: 'center',
+    fontSize: '14px',
+    marginBottom: '32px',
+    color: '#64748b',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px'
   },
-
   badge: {
-    padding: "4px 12px",
-    borderRadius: 999,
-    fontWeight: 600,
-    marginLeft: 6
+    padding: '6px 14px',
+    borderRadius: '10px',
+    fontWeight: '700',
+    fontSize: '12px',
+    letterSpacing: '0.05em',
+    textTransform: 'uppercase',
+    border: '1px solid transparent'
   },
-
   sectionTitle: {
-    marginTop: 10,
-    fontSize: 13,
-    fontWeight: 600,
-    color: "#374151"
+    marginTop: '12px',
+    paddingBottom: '8px',
+    fontSize: '15px',
+    fontWeight: '700',
+    color: '#1e293b',
+    borderBottom: '2px solid #f1f5f9',
+    marginBottom: '4px'
   },
-
   form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 14
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px' 
   },
-
   label: {
-    fontSize: 13,
-    fontWeight: 500,
-    color: "#4b5563"
+    fontSize: '13px',
+    fontWeight: '600',
+    color: '#475569',
+    marginBottom: '4px'
   },
-
   input: {
-    padding: "10px 12px",
-    borderRadius: 10,
-    border: "1px solid #e5e7eb",
-    fontSize: 14,
-    width: "100%"
+    padding: '12px 16px',
+    borderRadius: '12px',
+    border: '1px solid #e2e8f0',
+    fontSize: '14px',
+    color: '#1e293b',
+    background: '#f8fafc',
+    outline: 'none',
+    transition: 'all 0.2s ease',
   },
-
-  /* ⭐ RESPONSIVE GRID FIX */
   row: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))",
-    gap: 12
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+    gap: '20px'
   },
-
   col: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 6
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px'
   },
-
   success: {
-    fontSize: 13,
-    color: "#16a34a",
-    textAlign: "center"
+    fontSize: '14px',
+    color: '#059669',
+    background: '#ecfdf5',
+    padding: '12px',
+    borderRadius: '12px',
+    border: '1px solid #d1fae5',
+    textAlign: 'center',
+    fontWeight: '500'
   },
-
   error: {
-    fontSize: 13,
-    color: "#dc2626",
-    textAlign: "center"
+    fontSize: '14px',
+    color: '#dc2626',
+    background: '#fef2f2',
+    padding: '12px',
+    borderRadius: '12px',
+    border: '1px solid #fee2e2',
+    textAlign: 'center',
+    fontWeight: '500'
   },
-
   submitBtn: {
-    marginTop: 14,
-    padding: "12px",
-    borderRadius: 999,
-    border: "none",
-    background: "#4f46e5",
-    color: "#ffffff",
-    fontWeight: 600,
-    cursor: "pointer",
-    width: "100%"
+    marginTop: '16px',
+    padding: '16px',
+    borderRadius: '14px',
+    border: 'none',
+    background: '#4f46e5',
+    color: '#ffffff',
+    fontWeight: '600',
+    fontSize: '16px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)'
   }
 };
-
-
 export default CreateSessionPage;

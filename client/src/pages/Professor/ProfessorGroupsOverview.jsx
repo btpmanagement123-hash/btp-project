@@ -1,122 +1,5 @@
-
-// import { useEffect, useState } from 'react';
-// import api from '../../api/axios';
-
-// const ProfessorGroupsOverview = () => {
-//   const [groups, setGroups] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const load = async () => {
-//       try {
-//         const res = await api.get('/professor/groups');
-//         setGroups(res.data || []);
-//       } catch (err) {
-//         console.error('professor groups error', err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     load();
-//   }, []);
-
-//   return (
-//     <div>
-//       <h2 style={styles.title}>Group Supervision Centre</h2>
-//       <p style={styles.subtitle}>
-//         Overview of BTP groups under your supervision will appear here.
-//       </p>
-
-//       {loading && <p style={styles.muted}>Loading...</p>}
-
-//       {!loading && groups.length === 0 && (
-//         <p style={styles.muted}>No groups assigned yet for this session.</p>
-//       )}
-
-//       <div style={styles.list}>
-//         {groups.map((g) => (
-//           <div key={g._id} style={styles.card}>
-//             <div style={{ flex: 1 }}>
-//               <h3 style={styles.groupTitle}>
-//                 {g.title || 'BTP Project'}
-//               </h3>
-//               <p style={styles.meta}>
-//                 Session {g.session} · {g.members.length} student(s)
-//               </p>
-//             </div>
-//             <div style={styles.membersCol}>
-//               {g.members.map((m) => (
-//                 <div key={m._id} style={styles.memberChip}>
-//                   <span style={styles.initial}>
-//                     {(m.name || '?')[0]}
-//                   </span>
-//                   <div>
-//                     <div style={styles.memberName}>{m.name}</div>
-//                     <div style={styles.memberRoll}>{m.userId}</div>
-//                   </div>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// const styles = {
-//   title: { fontSize: 22, fontWeight: 700, marginBottom: 4 },
-//   subtitle: { fontSize: 13, color: '#6b7280', marginBottom: 16 },
-//   muted: { fontSize: 13, color: '#6b7280' },
-//   list: {
-//     marginTop: 8,
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: 12
-//   },
-//   card: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     gap: 16,
-//     background: '#ffffff',
-//     borderRadius: 18,
-//     padding: 16,
-//     boxShadow: '0 10px 30px rgba(15,23,42,0.06)'
-//   },
-//   groupTitle: { fontSize: 16, fontWeight: 600, marginBottom: 4 },
-//   meta: { fontSize: 12, color: '#6b7280' },
-//   membersCol: {
-//     minWidth: 260,
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: 6
-//   },
-//   memberChip: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     gap: 8,
-//     padding: 6,
-//     borderRadius: 12,
-//     background: '#f9fafb'
-//   },
-//   initial: {
-//     width: 26,
-//     height: 26,
-//     borderRadius: '999px',
-//     background: '#e5e7eb',
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     fontSize: 12,
-//     fontWeight: 600
-//   },
-//   memberName: { fontSize: 13, fontWeight: 500 },
-//   memberRoll: { fontSize: 11, color: '#6b7280' }
-// };
-
-// export default ProfessorGroupsOverview;
-import { useEffect, useState } from "react";
-import api from "../../api/axios";
+import { useEffect, useState } from 'react';
+import api from '../../api/axios';
 
 const ProfessorGroupsOverview = () => {
   const [groups, setGroups] = useState([]);
@@ -125,10 +8,10 @@ const ProfessorGroupsOverview = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await api.get("/professor/groups");
+        const res = await api.get('/professor/groups');
         setGroups(res.data || []);
       } catch (err) {
-        console.error("professor groups error", err);
+        console.error('professor groups error', err);
       } finally {
         setLoading(false);
       }
@@ -137,41 +20,35 @@ const ProfessorGroupsOverview = () => {
   }, []);
 
   return (
-    <div style={styles.wrapper}>
+    <div>
       <h2 style={styles.title}>Group Supervision Centre</h2>
-
       <p style={styles.subtitle}>
-        Overview of BTP groups under your supervision.
+        Overview of BTP groups under your supervision will appear here.
       </p>
 
       {loading && <p style={styles.muted}>Loading...</p>}
 
       {!loading && groups.length === 0 && (
-        <p style={styles.muted}>No groups assigned yet.</p>
+        <p style={styles.muted}>No groups assigned yet for this session.</p>
       )}
 
       <div style={styles.list}>
         {groups.map((g) => (
           <div key={g._id} style={styles.card}>
-            {/* Project Info */}
-            <div>
+            <div style={{ flex: 1 }}>
               <h3 style={styles.groupTitle}>
-                {g.title || "BTP Project"}
+                {g.title || 'BTP Project'}
               </h3>
-
               <p style={styles.meta}>
-                Session {g.session} · {g.members.length} students
+                Session {g.session} · {g.members.length} student(s)
               </p>
             </div>
-
-            {/* Members */}
-            <div style={styles.membersGrid}>
+            <div style={styles.membersCol}>
               {g.members.map((m) => (
                 <div key={m._id} style={styles.memberChip}>
                   <span style={styles.initial}>
-                    {(m.name || "?")[0]}
+                    {(m.name || '?')[0]}
                   </span>
-
                   <div>
                     <div style={styles.memberName}>{m.name}</div>
                     <div style={styles.memberRoll}>{m.userId}</div>
@@ -187,94 +64,101 @@ const ProfessorGroupsOverview = () => {
 };
 
 const styles = {
-  wrapper: {
-    maxWidth: 900,
-    margin: "0 auto",
-    padding: 16
+  title: { 
+    fontSize: '26px', 
+    fontWeight: '800', 
+    color: '#0f172a', 
+    letterSpacing: '-0.025em',
+    marginBottom: '4px' 
   },
-
-  title: {
-    fontSize: 22,
-    fontWeight: 700,
-    marginBottom: 4
+  subtitle: { 
+    fontSize: '15px', 
+    color: '#64748b', 
+    marginBottom: '24px',
+    lineHeight: '1.5' 
   },
-
-  subtitle: {
-    fontSize: 13,
-    color: "#6b7280",
-    marginBottom: 16
+  muted: { 
+    fontSize: '14px', 
+    color: '#94a3b8', 
+    textAlign: 'center', 
+    padding: '40px',
+    background: '#f8fafc',
+    borderRadius: '16px',
+    border: '2px dashed #e2e8f0'
   },
-
-  muted: {
-    fontSize: 13,
-    color: "#6b7280"
-  },
-
   list: {
-    marginTop: 10,
-    display: "flex",
-    flexDirection: "column",
-    gap: 12
+    marginTop: '12px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px'
   },
-
-  /* ⭐ Responsive Card */
   card: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 12,
-    background: "#fff",
-    borderRadius: 18,
-    padding: 16,
-    boxShadow: "0 10px 30px rgba(15,23,42,0.06)"
+    display: 'flex',
+    flexWrap: 'wrap', // Better for smaller screens
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '24px',
+    background: '#ffffff',
+    borderRadius: '20px',
+    padding: '24px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03)',
+    border: '1px solid #f1f5f9',
+    transition: 'transform 0.2s ease'
   },
-
-  groupTitle: {
-    fontSize: 16,
-    fontWeight: 600,
-    marginBottom: 4
+  groupTitle: { 
+    fontSize: '18px', 
+    fontWeight: '700', 
+    color: '#1e293b', 
+    marginBottom: '8px',
+    lineHeight: '1.4'
   },
-
-  meta: {
-    fontSize: 12,
-    color: "#6b7280"
+  meta: { 
+    fontSize: '13px', 
+    color: '#6366f1', // Indigo to make meta info pop
+    fontWeight: '600',
+    backgroundColor: '#eef2ff',
+    padding: '4px 10px',
+    borderRadius: '6px',
+    display: 'inline-block'
   },
-
-  /* ⭐ Responsive Member Grid */
-  membersGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))",
-    gap: 8
+  membersCol: {
+    minWidth: '280px',
+    flex: '1',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+    gap: '10px'
   },
-
   memberChip: {
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    padding: 8,
-    borderRadius: 12,
-    background: "#f9fafb"
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '10px',
+    borderRadius: '12px',
+    background: '#f8fafc',
+    border: '1px solid #eff6ff'
   },
-
   initial: {
-    width: 28,
-    height: 28,
-    borderRadius: "50%",
-    background: "#e5e7eb",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 12,
-    fontWeight: 600
+    width: '32px',
+    height: '32px',
+    borderRadius: '10px',
+    background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
+    color: '#475569',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '13px',
+    fontWeight: '700',
+    border: '1px solid #cbd5e1'
   },
-
-  memberName: {
-    fontSize: 13,
-    fontWeight: 500
+  memberName: { 
+    fontSize: '13px', 
+    fontWeight: '600', 
+    color: '#334155' 
   },
-
-  memberRoll: {
-    fontSize: 11,
-    color: "#6b7280"
+  memberRoll: { 
+    fontSize: '11px', 
+    color: '#94a3b8',
+    fontWeight: '500' 
   }
 };
 

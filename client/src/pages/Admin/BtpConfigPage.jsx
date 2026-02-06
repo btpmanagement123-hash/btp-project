@@ -159,102 +159,109 @@ const BtpConfigPage = () => {
   );
 };
 
-// 🎨 STYLES (RESPONSIVE + CLEAN ADMIN UI)
-// 🎨 FULL RESPONSIVE STYLES
 const styles = {
   page: {
-    maxWidth: 600,
-    margin: "0 auto",
-    padding: "16px"
+    maxWidth: '650px',
+    margin: '0 auto',
+    padding: '24px 16px'
   },
-
   wrapper: {
-    background: "#ffffff",
-    borderRadius: 18,
-    padding: "24px",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.06)"
+    background: '#ffffff',
+    borderRadius: '20px',
+    padding: '32px',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+    border: '1px solid #f1f5f9'
   },
-
   title: {
-    fontSize: 20,
-    fontWeight: 700,
-    marginBottom: 10,
-    textAlign: "center"
+    fontSize: '22px',
+    fontWeight: '700',
+    marginBottom: '8px',
+    textAlign: 'center',
+    color: '#0f172a',
+    letterSpacing: '-0.02em'
   },
-
   sessionBadge: {
-    textAlign: "center",
-    fontSize: 13,
-    marginBottom: 14,
-    color: "#374151"
+    textAlign: 'center',
+    fontSize: '14px',
+    marginBottom: '28px',
+    color: '#64748b',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px'
   },
-
   badge: {
-    background: "#ecfeff",
-    color: "#0369a1",
-    padding: "4px 10px",
-    borderRadius: 999,
-    fontWeight: 600,
-    marginLeft: 6
+    background: '#f0f9ff',
+    color: '#0369a1',
+    padding: '4px 12px',
+    borderRadius: '8px',
+    border: '1px solid #e0f2fe',
+    fontWeight: '600',
   },
-
   form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 14
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px'
   },
-
   label: {
-    fontSize: 13,
-    fontWeight: 500,
-    color: "#4b5563"
+    fontSize: '13px',
+    fontWeight: '600',
+    color: '#475569',
+    marginLeft: '2px'
   },
-
   input: {
-    padding: "10px 12px",
-    borderRadius: 10,
-    border: "1px solid #e5e7eb",
-    fontSize: 14,
-    width: "100%"
+    padding: '12px 14px',
+    borderRadius: '10px',
+    border: '1px solid #e2e8f0',
+    fontSize: '14px',
+    background: '#fcfcfd',
+    outline: 'none',
+    transition: 'border-color 0.2s ease',
+    color: '#1e293b'
   },
-
-  /* ⭐ RESPONSIVE GRID FIX */
   row: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px,1fr))",
-    gap: 12
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '20px'
   },
-
   col: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 6
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px'
   },
-
   success: {
-    fontSize: 13,
-    color: "#16a34a",
-    textAlign: "center"
+    fontSize: '14px',
+    color: '#059669',
+    background: '#ecfdf5',
+    padding: '10px',
+    borderRadius: '8px',
+    border: '1px solid #d1fae5',
+    textAlign: 'center',
+    fontWeight: '500'
   },
-
   error: {
-    fontSize: 13,
-    color: "#dc2626",
-    textAlign: "center"
+    fontSize: '14px',
+    color: '#dc2626',
+    background: '#fef2f2',
+    padding: '10px',
+    borderRadius: '8px',
+    border: '1px solid #fee2e2',
+    textAlign: 'center',
+    fontWeight: '500'
   },
-
   submitBtn: {
-    marginTop: 12,
-    padding: "12px",
-    borderRadius: 999,
-    border: "none",
-    background: "#4b5563",
-    color: "#ffffff",
-    fontWeight: 600,
-    cursor: "pointer",
-    width: "100%"
+    marginTop: '12px',
+    padding: '14px 0',
+    borderRadius: '12px',
+    border: 'none',
+    background: '#0f172a', // Matches the AdminLayout sidebar
+    color: '#ffffff',
+    fontWeight: '600',
+    fontSize: '15px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
   }
 };
-
 
 export default BtpConfigPage;

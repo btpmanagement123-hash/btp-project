@@ -178,175 +178,125 @@ const StudentGroupInvitations = () => {
   );
 };
 
-// const styles = {
-//   page: {
-//     maxWidth: 800,
-//     margin: '0 auto',
-//     padding: 16
-//   },
-//   title: {
-//     fontSize: 22,
-//     fontWeight: 700,
-//     marginBottom: 4
-//   },
-//   subtitle: {
-//     fontSize: 13,
-//     color: '#6b7280',
-//     marginBottom: 12
-//   },
-//   empty: {
-//     textAlign: 'center',
-//     marginTop: 20,
-//     color: '#6b7280'
-//   },
-//   card: {
-//     background: '#ffffff',
-//     borderRadius: 16,
-//     padding: 16,
-//     marginBottom: 14,
-//     boxShadow:
-//       '0 10px 30px rgba(15,23,42,0.06)'
-//   },
-//   header: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center'
-//   },
-//   badge: {
-//     background: '#eef2ff',
-//     color: '#4338ca',
-//     padding: '4px 10px',
-//     borderRadius: 999,
-//     fontSize: 12,
-//     fontWeight: 600
-//   },
-//   meta: {
-//     fontSize: 13,
-//     color: '#374151',
-//     marginTop: 4
-//   },
-//   members: {
-//     marginTop: 10,
-//     fontSize: 13
-//   },
-//   memberRow: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     padding: '4px 0'
-//   },
-//   status: {
-//     fontWeight: 600,
-//     textTransform: 'capitalize'
-//   },
-//   actions: {
-//     display: 'flex',
-//     gap: 10,
-//     marginTop: 12
-//   },
-//   btn: {
-//     padding: '8px 14px',
-//     borderRadius: 999,
-//     border: 'none',
-//     color: '#fff',
-//     cursor: 'pointer',
-//     fontWeight: 600
-//   }
-// };
 const styles = {
   page: {
-    maxWidth: 800,
-    margin: "0 auto",
-    padding: "16px"
+    maxWidth: '850px',
+    margin: '0 auto',
+    padding: '40px 20px',
+    fontFamily: '"Inter", system-ui, -apple-system, sans-serif',
+    color: '#1e293b'
   },
-
   title: {
-    fontSize: 22,
-    fontWeight: 700,
-    marginBottom: 4
+    fontSize: '28px',
+    fontWeight: '800',
+    letterSpacing: '-0.025em',
+    marginBottom: '8px',
+    color: '#0f172a'
   },
-
   subtitle: {
-    fontSize: 13,
-    color: "#6b7280",
-    marginBottom: 14
+    fontSize: '15px',
+    color: '#64748b',
+    marginBottom: '32px',
+    lineHeight: '1.5'
   },
-
   empty: {
-    textAlign: "center",
-    marginTop: 20,
-    color: "#6b7280"
+    textAlign: 'center',
+    padding: '60px 20px',
+    background: '#f8fafc',
+    borderRadius: '16px',
+    border: '2px dashed #e2e8f0',
+    color: '#94a3b8',
+    fontSize: '15px'
   },
-
   card: {
-    background: "#ffffff",
-    borderRadius: 16,
-    padding: "16px",
-    marginBottom: 14,
-    boxShadow: "0 10px 30px rgba(15,23,42,0.06)"
+    background: '#ffffff',
+    borderRadius: '20px',
+    padding: '24px',
+    marginBottom: '20px',
+    border: '1px solid #f1f5f9',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03)',
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
   },
-
-  /* ⭐ RESPONSIVE HEADER */
   header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: 6
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: '16px',
+    borderBottom: '1px solid #f8fafc',
+    paddingBottom: '16px'
   },
-
+  titleText: {
+    fontSize: '18px',
+    fontWeight: '700',
+    margin: 0,
+    color: '#1e293b'
+  },
   badge: {
-    background: "#eef2ff",
-    color: "#4338ca",
-    padding: "4px 10px",
-    borderRadius: 999,
-    fontSize: 12,
-    fontWeight: 600
+    background: '#f0f9ff',
+    color: '#0369a1',
+    padding: '6px 12px',
+    borderRadius: '8px',
+    fontSize: '11px',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em'
   },
-
   meta: {
-    fontSize: 13,
-    color: "#374151",
-    marginTop: 6
+    fontSize: '14px',
+    color: '#475569',
+    margin: '6px 0',
+    display: 'flex',
+    alignItems: 'center'
   },
-
   members: {
-    marginTop: 10,
-    fontSize: 13
+    marginTop: '20px',
+    padding: '16px',
+    background: '#f8fafc',
+    borderRadius: '12px'
   },
-
-  /* ⭐ MEMBER ROW RESPONSIVE */
+  memberTitle: {
+    display: 'block',
+    fontSize: '13px',
+    fontWeight: '600',
+    color: '#94a3b8',
+    marginBottom: '10px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.025em'
+  },
   memberRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: 4,
-    padding: "4px 0"
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '8px 0',
+    borderBottom: '1px solid #eff6ff'
   },
-
   status: {
-    fontWeight: 600,
-    textTransform: "capitalize"
+    fontSize: '12px',
+    fontWeight: '700',
+    padding: '4px 8px',
+    borderRadius: '6px',
+    textTransform: 'capitalize'
   },
-
-  /* ⭐ ACTION BUTTON RESPONSIVE */
   actions: {
-    display: "flex",
-    gap: 10,
-    marginTop: 12,
-    flexWrap: "wrap"
+    display: 'flex',
+    gap: '12px',
+    marginTop: '24px'
   },
-
   btn: {
-    padding: "8px 14px",
-    borderRadius: 999,
-    border: "none",
-    color: "#fff",
-    cursor: "pointer",
-    fontWeight: 600,
-    flex: "1 1 120px"
+    flex: 1,
+    padding: '12px 16px',
+    borderRadius: '12px',
+    border: 'none',
+    color: '#fff',
+    cursor: 'pointer',
+    fontWeight: '600',
+    fontSize: '14px',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
   }
 };
-
 
 export default StudentGroupInvitations;

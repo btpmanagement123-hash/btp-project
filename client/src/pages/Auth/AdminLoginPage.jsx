@@ -1,289 +1,108 @@
-
-// import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import api from '../../api/axios';
-// import { useAuth } from '../../context/AuthContext';
-
-// const AdminLoginPage = () => {
-//   const [form, setForm] = useState({
-//     email: '',
-//     password: ''
-//   });
-//   const [error, setError] = useState('');
-//   const { login } = useAuth();
-//   const navigate = useNavigate();
-
-//   const handleChange = (e) => {
-//     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError('');
-//     try {
-//       const res = await api.post('/auth/login', {
-//         ...form,
-//         role: 'admin',
-//         session: '2025-2026'
-//       });
-//       login(res.data);
-//       navigate('/admin');
-//     } catch (err) {
-//       setError(err.response?.data?.message || 'Admin login failed');
-//     }
-//   };
-
-//   return (
-//     <div style={styles.page}>
-//       <div style={styles.cardWrapper}>
-//         <div style={styles.badge}>NSUT • Admin</div>
-//         <h2 style={styles.title}>Administrator Access</h2>
-//         <p style={styles.subtitle}>Secure sign-in for portal administrators</p>
-
-//         {error && <p style={styles.error}>{error}</p>}
-
-//         <form onSubmit={handleSubmit} style={styles.form}>
-//           <div style={styles.inputGroup}>
-//             <label style={styles.label}>Admin Email</label>
-//             <input
-//               style={styles.input}
-//               name="email"
-//               type="email"
-//               value={form.email}
-//               onChange={handleChange}
-//               placeholder="admin@nsut.ac.in"
-//             />
-//           </div>
-
-//           <div style={styles.inputGroup}>
-//             <label style={styles.label}>Password</label>
-//             <input
-//               style={styles.input}
-//               name="password"
-//               type="password"
-//               value={form.password}
-//               onChange={handleChange}
-//               placeholder="Enter your password"
-//             />
-//           </div>
-
-
-//           <button type="submit" style={styles.button}>
-//             Sign in as Admin
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// const styles = {
-//   page: {
-//     minHeight: '100vh',
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     padding: '32px 16px',
-//     background:
-//       'radial-gradient(circle at top left, #1d4ed8 0, #020617 45%, #000000 100%)',
-//     fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif'
-//   },
-//   cardWrapper: {
-//     width: 400,
-//     padding: '32px 32px 26px',
-//     borderRadius: 24,
-//     background:
-//       'linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.88))',
-//     boxShadow:
-//       '0 24px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(148,163,184,0.18)',
-//     color: '#e5e7eb',
-//     backdropFilter: 'blur(20px)'
-//   },
-//   badge: {
-//     display: 'inline-flex',
-//     alignItems: 'center',
-//     gap: 6,
-//     padding: '4px 10px',
-//     borderRadius: 999,
-//     fontSize: 11,
-//     letterSpacing: '0.12em',
-//     textTransform: 'uppercase',
-//     background: 'rgba(37,99,235,0.16)',
-//     color: '#93c5fd',
-//     border: '1px solid rgba(59,130,246,0.4)',
-//     marginBottom: 14
-//   },
-//   title: {
-//     fontSize: 22,
-//     fontWeight: 700,
-//     margin: 0,
-//     marginBottom: 4,
-//     color: '#f9fafb',
-//     letterSpacing: '-0.02em'
-//   },
-//   subtitle: {
-//     fontSize: 13,
-//     color: '#9ca3af',
-//     margin: 0,
-//     marginBottom: 24
-//   },
-//   form: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: 16
-//   },
-//   inputGroup: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     gap: 6
-//   },
-//   label: {
-//     fontSize: 12,
-//     textTransform: 'uppercase',
-//     letterSpacing: '0.12em',
-//     color: '#9ca3af',
-//     fontWeight: 600
-//   },
-//   input: {
-//     padding: '10px 12px',
-//     borderRadius: 12,
-//     border: '1px solid #1f2937',
-//     background:
-//       'linear-gradient(135deg, rgba(15,23,42,0.95), rgba(15,23,42,0.9))',
-//     color: '#e5e7eb',
-//     fontSize: 14,
-//     outline: 'none',
-//     boxShadow: '0 0 0 1px rgba(15,23,42,0.8)',
-//     transition: 'all 0.18s ease'
-//   },
-//   metaRow: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     marginTop: 4
-//   },
-//   envPill: {
-//     fontSize: 11,
-//     padding: '3px 9px',
-//     borderRadius: 999,
-//     background: 'rgba(15,23,42,0.9)',
-//     border: '1px solid rgba(55,65,81,0.9)',
-//     color: '#9ca3af'
-//   },
-//   helperText: {
-//     fontSize: 11,
-//     color: '#6b7280'
-//   },
-//   button: {
-//     marginTop: 18,
-//     padding: '10px 0',
-//     borderRadius: 999,
-//     border: 'none',
-//     background:
-//       'linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #0ea5e9 100%)',
-//     color: '#f9fafb',
-//     fontWeight: 700,
-//     fontSize: 14,
-//     cursor: 'pointer',
-//     boxShadow: '0 14px 35px rgba(37,99,235,0.65)',
-//     letterSpacing: '0.06em',
-//     textTransform: 'uppercase'
-//   },
-//   error: {
-//     color: '#fca5a5',
-//     marginBottom: 4,
-//     fontSize: 12,
-//     padding: '8px 10px',
-//     borderRadius: 10,
-//     background: 'rgba(127,29,29,0.25)',
-//     border: '1px solid rgba(248,113,113,0.4)'
-//   }
-// };
-
-// export default AdminLoginPage;
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../../api/axios";
-import { useAuth } from "../../context/AuthContext";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../../api/axios';
+import { useAuth } from '../../context/AuthContext';
+import nsutLogo from '../../assets/nsutlogo.png';
 
 const AdminLoginPage = () => {
   const [form, setForm] = useState({
-    email: "",
-    password: ""
+    email: '',
+    password: ''
   });
-
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
+    setError('');
+    setLoading(true);
     try {
-      const res = await api.post("/auth/login", {
+      const res = await api.post('/auth/login', {
         ...form,
-        role: "admin",
-        session: "2025-2026"
+        role: 'admin',
+        session: '2025-2026'
       });
-
       login(res.data);
-      navigate("/admin");
+      navigate('/admin');
     } catch (err) {
-      setError(err.response?.data?.message || "Admin login failed");
+      setError(err.response?.data?.message || 'Admin authentication failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div style={styles.page}>
-      <div style={styles.cardWrapper}>
-        <div style={styles.badge}>NSUT • Admin</div>
+      <div style={styles.meshGradient} />
 
-        <h2 style={styles.title}>Administrator Access</h2>
-        <p style={styles.subtitle}>
-          Secure sign-in for portal administrators
-        </p>
+      <div style={styles.contentWrapper}>
+        {/* Left Side: Branding with Bigger Logo */}
+        <div style={styles.brandSection}>
+          <div style={styles.logoContainer}>
+            <img src={nsutLogo} alt="NSUT Logo" style={styles.mainLogo} />
+          </div>
+          <div style={styles.brandTextWrapper}>
+            <h1 style={styles.brandTitle}>Admin Portal</h1>
+            <p style={styles.brandSubtitle}>
+              <span style={styles.highlightText}>NSUT BTP Academic Operations</span>
+              <br /> Centralized Project Management System
+            </p>
+          </div>
+        </div>
 
-        {error && <p style={styles.error}>{error}</p>}
-
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Admin Email</label>
-
-            <input
-              style={styles.input}
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="admin@nsut.ac.in"
-            />
+        {/* Right Side: Login Card */}
+        <div style={styles.loginCard}>
+          <div style={styles.cardHeader}>
+            <h2 style={styles.signInText}>Admin Access</h2>
+            <p style={styles.signInSub}>Use your administrative credentials</p>
           </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Password</label>
+          <form onSubmit={handleSubmit} style={styles.form}>
+            <div style={styles.inputWrapper}>
+              <label style={styles.label}>Admin Email</label>
+              <input
+                style={styles.input}
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="admin@nsut.ac.in"
+                required
+              />
+            </div>
 
-            <input
-              style={styles.input}
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-            />
-          </div>
+            <div style={styles.inputWrapper}>
+              <label style={styles.label}>Master Password</label>
+              <input
+                style={styles.input}
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
+              />
+            </div>
 
-          <button type="submit" style={styles.button}>
-            Sign in as Admin
-          </button>
-        </form>
+            {error && <div style={styles.errorBanner}>{error}</div>}
+
+            <button 
+              type="submit" 
+              disabled={loading} 
+              style={loading ? styles.btnLoading : styles.btn}
+            >
+              {loading ? 'Authorizing...' : 'Login'}
+            </button>
+          </form>
+          
+          
+        </div>
       </div>
     </div>
   );
@@ -291,108 +110,168 @@ const AdminLoginPage = () => {
 
 const styles = {
   page: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "24px 14px",
-    background:
-      "radial-gradient(circle at top left, #1d4ed8 0, #020617 45%, #000000 100%)",
-    fontFamily:
-      '"Inter", -apple-system, BlinkMacSystemFont, sans-serif'
+    height: '100vh',
+    width: '100vw',
+    backgroundColor: '#ffffff',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: '"Plus Jakarta Sans", sans-serif',
+    position: 'relative',
+    overflow: 'hidden',
   },
-
-  /* ⭐ RESPONSIVE CARD */
-  cardWrapper: {
-    width: "100%",
-    maxWidth: "420px",
-    padding: "32px 28px",
-    borderRadius: 24,
-    background:
-      "linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.88))",
-    boxShadow:
-      "0 24px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(148,163,184,0.18)",
-    color: "#e5e7eb",
-    backdropFilter: "blur(20px)"
+  meshGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 0,
+    backgroundImage: `
+      radial-gradient(at 0% 0%, hsla(210,100%,96%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(220,100%,94%,1) 0, transparent 50%), 
+      radial-gradient(at 0% 100%, hsla(215,100%,92%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 100%, hsla(230,100%,95%,1) 0, transparent 50%)
+    `,
+    opacity: 0.8,
   },
-
-  badge: {
-    display: "inline-flex",
-    padding: "4px 10px",
-    borderRadius: 999,
-    fontSize: 11,
-    letterSpacing: "0.12em",
-    textTransform: "uppercase",
-    background: "rgba(37,99,235,0.16)",
-    color: "#93c5fd",
-    border: "1px solid rgba(59,130,246,0.4)",
-    marginBottom: 14
+  contentWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '85%',
+    maxWidth: '1200px',
+    zIndex: 1,
+    gap: '60px',
   },
-
-  title: {
-    fontSize: 22,
-    fontWeight: 700,
-    marginBottom: 6,
-    color: "#f9fafb"
+  brandSection: {
+    flex: 1,
+    textAlign: 'left',
   },
-
-  subtitle: {
-    fontSize: 13,
-    color: "#9ca3af",
-    marginBottom: 22
+  logoContainer: {
+    width: '160px', // Bada container
+    height: '160px',
+    backgroundColor: '#fff',
+    borderRadius: '40px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxShadow: '0 30px 60px -12px rgba(0,0,0,0.12)',
+    marginBottom: '32px',
+    border: '1px solid #f1f5f9',
   },
-
+  mainLogo: {
+    width: '120px', // Bada logo size
+    height: 'auto',
+  },
+  brandTitle: {
+    fontSize: '64px',
+    fontWeight: '900',
+    color: '#0f172a',
+    margin: 0,
+    letterSpacing: '-3px',
+    lineHeight: '0.9',
+  },
+  brandSubtitle: {
+    fontSize: '20px',
+    color: '#475569',
+    lineHeight: '1.5',
+    marginTop: '16px',
+  },
+  highlightText: {
+    fontWeight: '700',
+    color: '#334155',
+    borderBottom: '3px solid #cbd5e1',
+  },
+  loginCard: {
+    width: '440px',
+    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+    backdropFilter: 'blur(20px)',
+    borderRadius: '40px',
+    padding: '56px',
+    boxShadow: '0 40px 100px -20px rgba(0, 0, 0, 0.15)',
+    border: '1px solid #ffffff',
+  },
+  cardHeader: {
+    marginBottom: '40px',
+  },
+  signInText: {
+    fontSize: '28px',
+    fontWeight: '800',
+    color: '#0f172a',
+    margin: 0,
+  },
+  signInSub: {
+    fontSize: '15px',
+    color: '#94a3b8',
+    marginTop: '8px',
+  },
   form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 16
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
   },
-
-  inputGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 6
+  inputWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
   },
-
   label: {
-    fontSize: 12,
-    letterSpacing: "0.1em",
-    color: "#9ca3af",
-    fontWeight: 600
+    fontSize: '12px',
+    fontWeight: '800',
+    color: '#1e293b',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+    marginLeft: '4px',
   },
-
   input: {
-    width: "100%",
-    padding: "12px 14px",
-    borderRadius: 12,
-    border: "1px solid #1f2937",
-    background:
-      "linear-gradient(135deg, rgba(15,23,42,0.95), rgba(15,23,42,0.9))",
-    color: "#e5e7eb",
-    fontSize: 15,
-    outline: "none"
+    width: '100%',
+    padding: '18px',
+    borderRadius: '16px',
+    border: '2px solid #f1f5f9',
+    backgroundColor: '#f8fafc',
+    fontSize: '15px',
+    color: '#0f172a',
+    outline: 'none',
+    transition: '0.2s all ease',
+    boxSizing: 'border-box',
+    '&:focus': {
+      borderColor: '#0f172a',
+      backgroundColor: '#fff',
+    }
   },
-
-  button: {
-    marginTop: 16,
-    padding: "12px 0",
-    borderRadius: 999,
-    border: "none",
-    background:
-      "linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #0ea5e9 100%)",
-    color: "#f9fafb",
-    fontWeight: 700,
-    fontSize: 14,
-    cursor: "pointer"
+  errorBanner: {
+    backgroundColor: '#fff1f2',
+    color: '#e11d48',
+    padding: '14px',
+    borderRadius: '14px',
+    fontSize: '13px',
+    fontWeight: '600',
+    textAlign: 'center',
+    border: '1px solid #ffe4e6',
   },
-
-  error: {
-    color: "#fca5a5",
-    fontSize: 12,
-    padding: "8px 10px",
-    borderRadius: 10,
-    background: "rgba(127,29,29,0.25)"
-  }
+  btn: {
+    marginTop: '12px',
+    padding: '20px',
+    borderRadius: '18px',
+    border: 'none',
+    background: '#0f172a', 
+    color: '#fff',
+    fontSize: '16px',
+    fontWeight: '700',
+    cursor: 'pointer',
+    boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.3)',
+    transition: 'all 0.2s ease',
+  },
+  btnLoading: {
+    backgroundColor: '#94a3b8',
+    padding: '20px',
+    borderRadius: '18px',
+    border: 'none',
+    color: '#fff',
+    width: '100%',
+  },
 };
 
 export default AdminLoginPage;

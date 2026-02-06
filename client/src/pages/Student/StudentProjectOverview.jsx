@@ -1,167 +1,5 @@
-// import { useEffect, useState } from 'react';
-// import api from '../../api/axios';
-
-// const StudentProjectOverview = () => {
-//   const [group, setGroup] = useState(null);
-//   const [requests, setRequests] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   // Simple version: show latest group-request as status
-//   useEffect(() => {
-//     const load = async () => {
-//       try {
-//         const res = await api.get('/student/group-requests');
-//         const list = res.data || [];
-//         setRequests(list);
-//         const approved = list.find((r) => r.status === 'approved');
-//         if (approved) {
-//           setGroup(approved);
-//         }
-//       } catch (err) {
-//         console.error('student group-requests error', err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     load();
-//   }, []);
-
-//   if (loading) return <p>Loading...</p>;
-
-//   if (!group && requests.length === 0) {
-//     return (
-//       <p style={{ fontSize: 14, color: '#6b7280' }}>
-//         No project registered yet. Create a group from the Registration page.
-//       </p>
-//     );
-//   }
-
-//   const latest = requests[0];
-
-//   return (
-//     <div>
-//       <h2 style={styles.title}>Project Overview</h2>
-
-//       {latest && (
-//         <div style={styles.badgeRow}>
-//           <span style={styles.statusBadge(latest.status)}>
-//             {latest.status.replace('_', ' ')}
-//           </span>
-//           <span style={styles.smallMuted}>
-//             Supervisor: {latest.professor?.name || 'TBD'}
-//           </span>
-//         </div>
-//       )}
-
-//       {group && (
-//         <div style={styles.card}>
-//           <h3 style={styles.cardHeading}>{group.title || 'BTP Project'}</h3>
-//           <div style={styles.metaRow}>
-//             <span style={styles.metaLabel}>Supervisor</span>
-//             <span style={styles.metaValue}>
-//               {group.professor?.name || 'Not assigned'}
-//             </span>
-//           </div>
-//           <div style={styles.metaRow}>
-//             <span style={styles.metaLabel}>Session</span>
-//             <span style={styles.metaValue}>{group.session}</span>
-//           </div>
-
-//           <h4 style={styles.teamTitle}>Student Team</h4>
-//           <div style={styles.teamList}>
-//             {group.members.map((m) => (
-//               <div key={m.student?._id || m._id} style={styles.teamChip}>
-//                 <span style={styles.initial}>
-//                   {(m.student?.name || m.studentName || '?')[0]}
-//                 </span>
-//                 <div>
-//                   <div style={styles.chipName}>
-//                     {m.student?.name || m.studentName || 'Student'}
-//                   </div>
-//                   <div style={styles.chipRoll}>
-//                     {m.student?.userId || m.rollNo || ''}
-//                   </div>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// const styles = {
-//   title: { fontSize: 22, fontWeight: 700, marginBottom: 10 },
-//   badgeRow: {
-//     display: 'flex',
-//     gap: 10,
-//     alignItems: 'center',
-//     marginBottom: 16
-//   },
-//   statusBadge: (status) => ({
-//     padding: '4px 10px',
-//     borderRadius: 999,
-//     fontSize: 12,
-//     fontWeight: 600,
-//     textTransform: 'capitalize',
-//     background:
-//       status === 'approved'
-//         ? '#dcfce7'
-//         : status === 'rejected'
-//         ? '#fee2e2'
-//         : '#e0f2fe',
-//     color:
-//       status === 'approved'
-//         ? '#15803d'
-//         : status === 'rejected'
-//         ? '#b91c1c'
-//         : '#0369a1'
-//   }),
-//   smallMuted: { fontSize: 12, color: '#6b7280' },
-//   card: {
-//     background: '#ffffff',
-//     borderRadius: 18,
-//     padding: 18,
-//     boxShadow: '0 10px 30px rgba(15,23,42,0.06)'
-//   },
-//   cardHeading: { fontSize: 20, fontWeight: 700, marginBottom: 12 },
-//   metaRow: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     fontSize: 13,
-//     padding: '4px 0'
-//   },
-//   metaLabel: { color: '#6b7280' },
-//   metaValue: { color: '#111827', fontWeight: 500 },
-//   teamTitle: { marginTop: 16, fontSize: 14, fontWeight: 600 },
-//   teamList: { marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 },
-//   teamChip: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     gap: 8,
-//     padding: 8,
-//     borderRadius: 12,
-//     background: '#f9fafb'
-//   },
-//   initial: {
-//     width: 28,
-//     height: 28,
-//     borderRadius: '999px',
-//     background: '#e5e7eb',
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     fontSize: 13,
-//     fontWeight: 600
-//   },
-//   chipName: { fontSize: 13, fontWeight: 500 },
-//   chipRoll: { fontSize: 11, color: '#6b7280' }
-// };
-
-// export default StudentProjectOverview;
-import { useEffect, useState } from "react";
-import api from "../../api/axios";
+import { useEffect, useState } from 'react';
+import api from '../../api/axios';
 
 const StudentProjectOverview = () => {
   const [group, setGroup] = useState(null);
@@ -171,15 +9,15 @@ const StudentProjectOverview = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await api.get("/student/group-requests");
+        const res = await api.get('/student/group-requests');
         const list = res.data || [];
-
         setRequests(list);
-
-        const approved = list.find((r) => r.status === "approved");
-        if (approved) setGroup(approved);
+        const approved = list.find((r) => r.status === 'approved');
+        if (approved) {
+          setGroup(approved);
+        }
       } catch (err) {
-        console.error("student group-requests error", err);
+        console.error('student group-requests error', err);
       } finally {
         setLoading(false);
       }
@@ -187,65 +25,60 @@ const StudentProjectOverview = () => {
     load();
   }, []);
 
-  if (loading) return <p style={styles.loading}>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   if (!group && requests.length === 0) {
     return (
-      <div style={styles.emptyBox}>
-        No project registered yet. Create group from Registration.
-      </div>
+      <p style={{ fontSize: 14, color: '#6b7280' }}>
+        No project registered yet. Create a group from the Registration page.
+      </p>
     );
   }
 
   const latest = requests[0];
 
   return (
-    <div style={styles.wrapper}>
+    <div>
       <h2 style={styles.title}>Project Overview</h2>
 
-      {/* Status */}
       {latest && (
         <div style={styles.badgeRow}>
           <span style={styles.statusBadge(latest.status)}>
-            {latest.status.replace("_", " ")}
+            {latest.status.replace('_', ' ')}
           </span>
-
           <span style={styles.smallMuted}>
-            Supervisor: {latest.professor?.name || "TBD"}
+            Supervisor: {latest.professor?.name || 'TBD'}
           </span>
         </div>
       )}
 
-      {/* Project Card */}
       {group && (
         <div style={styles.card}>
-          <h3 style={styles.cardHeading}>
-            {group.title || "BTP Project"}
-          </h3>
+          <h3 style={styles.cardHeading}>{group.title || 'BTP Project'}</h3>
+          <div style={styles.metaRow}>
+            <span style={styles.metaLabel}>Supervisor</span>
+            <span style={styles.metaValue}>
+              {group.professor?.name || 'Not assigned'}
+            </span>
+          </div>
+          <div style={styles.metaRow}>
+            <span style={styles.metaLabel}>Session</span>
+            <span style={styles.metaValue}>{group.session}</span>
+          </div>
 
-          <InfoRow
-            label="Supervisor"
-            value={group.professor?.name || "Not assigned"}
-          />
-
-          <InfoRow label="Session" value={group.session} />
-
-          {/* Team */}
           <h4 style={styles.teamTitle}>Student Team</h4>
-
-          <div style={styles.teamGrid}>
+          <div style={styles.teamList}>
             {group.members.map((m) => (
               <div key={m.student?._id || m._id} style={styles.teamChip}>
                 <span style={styles.initial}>
-                  {(m.student?.name || "?")[0]}
+                  {(m.student?.name || m.studentName || '?')[0]}
                 </span>
-
                 <div>
                   <div style={styles.chipName}>
-                    {m.student?.name || "Student"}
+                    {m.student?.name || m.studentName || 'Student'}
                   </div>
                   <div style={styles.chipRoll}>
-                    {m.student?.userId || ""}
+                    {m.student?.userId || m.rollNo || ''}
                   </div>
                 </div>
               </div>
@@ -257,146 +90,114 @@ const StudentProjectOverview = () => {
   );
 };
 
-/* Reusable row */
-const InfoRow = ({ label, value }) => (
-  <div style={styles.metaRow}>
-    <span style={styles.metaLabel}>{label}</span>
-    <span style={styles.metaValue}>{value}</span>
-  </div>
-);
-
 const styles = {
-  wrapper: {
-    maxWidth: 850,
-    margin: "0 auto",
-    padding: 16
+  title: { 
+    fontSize: '26px', 
+    fontWeight: '800', 
+    marginBottom: '16px', 
+    color: '#0f172a',
+    letterSpacing: '-0.025em'
   },
-
-  loading: {
-    textAlign: "center",
-    padding: 20
-  },
-
-  emptyBox: {
-    background: "#f9fafb",
-    padding: 18,
-    borderRadius: 14,
-    fontSize: 14,
-    color: "#6b7280"
-  },
-
-  title: {
-    fontSize: 22,
-    fontWeight: 700,
-    marginBottom: 12
-  },
-
   badgeRow: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: 10,
-    alignItems: "center",
-    marginBottom: 16
+    display: 'flex',
+    gap: '12px',
+    alignItems: 'center',
+    marginBottom: '24px'
   },
-
   statusBadge: (status) => ({
-    padding: "4px 10px",
-    borderRadius: 999,
-    fontSize: 12,
-    fontWeight: 600,
-    textTransform: "capitalize",
+    padding: '6px 14px',
+    borderRadius: '8px',
+    fontSize: '12px',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
     background:
-      status === "approved"
-        ? "#dcfce7"
-        : status === "rejected"
-        ? "#fee2e2"
-        : "#e0f2fe",
+      status === 'approved'
+        ? '#ecfdf5'
+        : status === 'rejected'
+        ? '#fff1f2'
+        : '#f0f7ff',
     color:
-      status === "approved"
-        ? "#15803d"
-        : status === "rejected"
-        ? "#b91c1c"
-        : "#0369a1"
+      status === 'approved'
+        ? '#059669'
+        : status === 'rejected'
+        ? '#e11d48'
+        : '#2563eb',
+    border: `1px solid ${
+      status === 'approved' 
+        ? '#10b98133' 
+        : status === 'rejected' 
+        ? '#f43f5e33' 
+        : '#3b82f633'
+    }`
   }),
-
-  smallMuted: {
-    fontSize: 12,
-    color: "#6b7280"
+  smallMuted: { 
+    fontSize: '14px', 
+    color: '#64748b',
+    fontWeight: '500'
   },
-
   card: {
-    background: "#fff",
-    borderRadius: 18,
-    padding: 18,
-    boxShadow: "0 10px 30px rgba(15,23,42,0.06)"
+    background: '#ffffff',
+    borderRadius: '24px',
+    padding: '32px',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
+    border: '1px solid #f1f5f9'
   },
-
-  cardHeading: {
-    fontSize: 20,
-    fontWeight: 700,
-    marginBottom: 12
+  cardHeading: { 
+    fontSize: '22px', 
+    fontWeight: '800', 
+    marginBottom: '20px', 
+    color: '#1e293b',
+    lineHeight: '1.3'
   },
-
   metaRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    fontSize: 13,
-    padding: "6px 0"
+    display: 'flex',
+    justifyContent: 'space-between',
+    fontSize: '15px',
+    padding: '12px 0',
+    borderBottom: '1px solid #f8fafc'
   },
-
-  metaLabel: {
-    color: "#6b7280"
+  metaLabel: { color: '#94a3b8', fontWeight: '500' },
+  metaValue: { color: '#334155', fontWeight: '700' },
+  teamTitle: { 
+    marginTop: '32px', 
+    fontSize: '13px', 
+    fontWeight: '700', 
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em'
   },
-
-  metaValue: {
-    color: "#111827",
-    fontWeight: 500
+  teamList: { 
+    marginTop: '16px', 
+    display: 'grid', 
+    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+    gap: '12px' 
   },
-
-  teamTitle: {
-    marginTop: 16,
-    fontSize: 14,
-    fontWeight: 600
-  },
-
-  /* ⭐ Responsive Team Grid */
-  teamGrid: {
-    marginTop: 10,
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))",
-    gap: 10
-  },
-
   teamChip: {
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    padding: 10,
-    borderRadius: 12,
-    background: "#f9fafb"
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    padding: '12px',
+    borderRadius: '16px',
+    background: '#f8fafc',
+    border: '1px solid #f1f5f9',
+    transition: 'all 0.2s ease'
   },
-
   initial: {
-    width: 30,
-    height: 30,
-    borderRadius: "50%",
-    background: "#e5e7eb",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: 600
+    width: '36px',
+    height: '36px',
+    borderRadius: '12px',
+    background: 'linear-gradient(135deg, #6366f1 0%, #4338ca 100%)',
+    color: '#ffffff',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '14px',
+    fontWeight: '700',
+    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)'
   },
-
-  chipName: {
-    fontSize: 13,
-    fontWeight: 500
-  },
-
-  chipRoll: {
-    fontSize: 11,
-    color: "#6b7280"
-  }
+  chipName: { fontSize: '14px', fontWeight: '700', color: '#1e293b' },
+  chipRoll: { fontSize: '12px', color: '#64748b', marginTop: '2px' }
 };
 
 export default StudentProjectOverview;
