@@ -11,13 +11,13 @@ const LoginPage = () => {
   const [selectedRole, setSelectedRole] = useState('Student');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Visibility state
   const [sessionYear, setSessionYear] = useState('');
   const [sessions, setSessions] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 850);
 
-  // Handle window resizing for responsive layout adjustments
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 850);
     window.addEventListener('resize', handleResize);
@@ -57,6 +57,21 @@ const LoginPage = () => {
     }
   };
 
+  // Custom SVG Eye Icon Component
+  const EyeIcon = ({ visible }) => (
+    visible ? (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+      </svg>
+    ) : (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+    )
+  );
+
   return (
     <div style={styles.page}>
       <div style={{
@@ -66,7 +81,6 @@ const LoginPage = () => {
         padding: isMobile ? '20px' : '40px',
       }}>
         
-        {/* Left Side: Branding */}
         <div style={{
           ...styles.brandSection,
           textAlign: isMobile ? 'center' : 'left',
@@ -94,7 +108,6 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* Right Side: Login Card */}
         <div style={{
           ...styles.loginCard,
           width: isMobile ? '100%' : '400px',
@@ -134,16 +147,26 @@ const LoginPage = () => {
               />
             </div>
 
+            {/* Updated Password Field with Custom SVG Eye Icon */}
             <div style={styles.inputWrapper}>
               <label style={styles.label}>Password</label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={styles.input}
-                required
-              />
+              <div style={styles.passwordContainer}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  style={styles.passwordInput}
+                  required
+                />
+                <button 
+                  type="button" 
+                  onClick={() => setShowPassword(!showPassword)} 
+                  style={styles.eyeBtn}
+                >
+                  <EyeIcon visible={showPassword} />
+                </button>
+              </div>
             </div>
 
             {selectedRole === 'Faculty' && (
@@ -178,8 +201,43 @@ const LoginPage = () => {
 };
 
 const styles = {
+  // Existing styles kept for brevity, showing updated/new ones:
+  passwordContainer: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+  },
+  passwordInput: {
+    width: '100%',
+    padding: '14px',
+    paddingRight: '45px', // Space for eye icon
+    borderRadius: '12px',
+    border: '2px solid #f1f5f9',
+    backgroundColor: '#f8fafc',
+    fontSize: '15px',
+    color: '#1e293b',
+    outline: 'none',
+    transition: 'all 0.2s ease',
+    boxSizing: 'border-box',
+  },
+  eyeBtn: {
+    position: 'absolute',
+    right: '12px',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    color: '#94a3b8',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '4px',
+    transition: 'color 0.2s ease',
+    zIndex: 2,
+    outline: 'none',
+  },
+  // Rest of your styles...
   page: {
-    minHeight: '100vh', // Changed from height to minHeight to allow scrolling on mobile
+    minHeight: '100vh',
     width: '100vw',
     backgroundColor: '#ffffff',
     display: 'flex',
@@ -187,7 +245,7 @@ const styles = {
     alignItems: 'center',
     fontFamily: '"Inter", "Plus Jakarta Sans", sans-serif',
     margin: 0,
-    padding: '20px 0', // Add vertical padding for mobile
+    padding: '20px 0',
     boxSizing: 'border-box',
     overflowX: 'hidden',
   },
@@ -207,9 +265,6 @@ const styles = {
   mainLogo: {
     height: 'auto',
     marginBottom: '8px',
-  },
-  brandTextWrapper: {
-    // Dynamic styles applied in component
   },
   brandTitle: {
     fontWeight: '900',
