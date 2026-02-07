@@ -187,17 +187,20 @@ const styles = {
   page: {
     maxWidth: '750px',
     margin: '0 auto',
-    padding: '24px 16px'
+    padding: 'clamp(12px, 4vw, 24px) 16px',
+    boxSizing: 'border-box'
   },
   wrapper: {
     background: '#ffffff',
     borderRadius: '24px',
-    padding: '40px',
+    padding: 'clamp(20px, 6vw, 40px)',
     boxShadow: '0 4px 25px rgba(0, 0, 0, 0.04)',
-    border: '1px solid #f1f5f9'
+    border: '1px solid #f1f5f9',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   title: {
-    fontSize: '24px',
+    fontSize: 'clamp(20px, 5vw, 24px)',
     fontWeight: '700',
     marginBottom: '8px',
     textAlign: 'center',
@@ -210,6 +213,7 @@ const styles = {
     marginBottom: '32px',
     color: '#64748b',
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px'
@@ -221,7 +225,8 @@ const styles = {
     fontSize: '12px',
     letterSpacing: '0.05em',
     textTransform: 'uppercase',
-    border: '1px solid transparent'
+    border: '1px solid transparent',
+    whiteSpace: 'nowrap'
   },
   sectionTitle: {
     marginTop: '12px',
@@ -235,7 +240,7 @@ const styles = {
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px' 
+    gap: '24px'
   },
   label: {
     fontSize: '13px',
@@ -247,16 +252,19 @@ const styles = {
     padding: '12px 16px',
     borderRadius: '12px',
     border: '1px solid #e2e8f0',
-    fontSize: '14px',
+    fontSize: '16px',
     color: '#1e293b',
     background: '#f8fafc',
     outline: 'none',
     transition: 'all 0.2s ease',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   row: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-    gap: '20px'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+    gap: '20px',
+    width: '100%'
   },
   col: {
     display: 'flex',
@@ -271,7 +279,8 @@ const styles = {
     borderRadius: '12px',
     border: '1px solid #d1fae5',
     textAlign: 'center',
-    fontWeight: '500'
+    fontWeight: '500',
+    wordBreak: 'break-word'
   },
   error: {
     fontSize: '14px',
@@ -281,7 +290,8 @@ const styles = {
     borderRadius: '12px',
     border: '1px solid #fee2e2',
     textAlign: 'center',
-    fontWeight: '500'
+    fontWeight: '500',
+    wordBreak: 'break-word'
   },
   submitBtn: {
     marginTop: '16px',
@@ -294,7 +304,10 @@ const styles = {
     fontSize: '16px',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
-    boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)'
+    boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
+    width: '100%',
+    WebkitTapHighlightColor: 'transparent'
   }
 };
+
 export default CreateSessionPage;

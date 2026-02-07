@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import nsutLogo from '../../assets/nsutlogo.png';
 import { useAuth } from '../../context/AuthContext';
@@ -5,40 +6,75 @@ import { useAuth } from '../../context/AuthContext';
 const AdminLayout = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 1024;
+      setIsMobile(mobile);
+      if (!mobile) setIsMenuOpen(false); 
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   return (
     <div style={styles.app}>
-      <aside style={styles.sidebar}>
+      {/* Mobile Overlay */}
+      {isMobile && isMenuOpen && (
+        <div style={styles.overlay} onClick={() => setIsMenuOpen(false)} />
+      )}
+
+      {/* Sidebar */}
+      <aside style={{
+        ...styles.sidebar,
+        transform: isMobile ? (isMenuOpen ? 'translateX(0)' : 'translateX(-100%)') : 'none',
+        position: isMobile ? 'fixed' : 'relative',
+      }}>
         <div style={styles.logoWrapper}>
           <img src={nsutLogo} alt="NSUT" style={styles.logo} />
+          <span style={styles.logoText}>Admin Panel</span>
         </div>
         <nav style={styles.nav}>
-          <NavLink to="/admin/accounts" style={styles.navItem}>
+          <NavLink to="/admin/accounts" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
             Accounts Centre
           </NavLink>
-          <NavLink to="/admin/settings" style={styles.navItem}>
+          <NavLink to="/admin/settings" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
             Settings and Setup
-          </NavLink><NavLink to="/admin/notifications" style={styles.navItem}>
-    Notifications
-  </NavLink>
-
-          
+          </NavLink>
+          <NavLink to="/admin/notifications" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
+            Notifications
+          </NavLink>
         </nav>
       </aside>
 
       <div style={styles.main}>
         <header style={styles.header}>
-         
-          <button onClick={handleLogout} style={styles.logoutBtn}>
-            Logout
-          </button>
+          {isMobile && (
+            <button onClick={toggleMenu} style={styles.menuBtn}>
+              {isMenuOpen ? '✕' : '☰'}
+            </button>
+          )}
+          
+          <div style={styles.headerRight}>
+            <button onClick={handleLogout} style={styles.logoutBtn}>
+              Logout
+            </button>
+          </div>
         </header>
-        <main style={styles.content}>
+        
+        <main style={{
+          ...styles.content,
+          padding: isMobile ? '20px' : '32px'
+        }}>
           <Outlet />
         </main>
       </div>
@@ -50,30 +86,50 @@ const styles = {
   app: { 
     display: 'flex', 
     minHeight: '100vh', 
-    background: '#f8fafc', // Slightly cooler light gray
-    fontFamily: '"Inter", system-ui, sans-serif'
+    background: '#f8fafc',
+    fontFamily: '"Inter", system-ui, sans-serif',
+    position: 'relative',
+    overflow: 'hidden'
+  },
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(15, 23, 42, 0.4)',
+    backdropFilter: 'blur(4px)',
+    zIndex: 15,
   },
   sidebar: {
-    width: 260, // Widened slightly for better text breathing room
-    background: '#0f172a', // Deep Slate 900
+    width: 260,
+    background: '#0f172a',
     color: '#f1f5f9',
     display: 'flex',
     flexDirection: 'column',
     boxShadow: '4px 0 10px rgba(0,0,0,0.05)',
-    zIndex: 10
+    zIndex: 20,
+    transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    height: '100vh',
   },
   logoWrapper: {
     height: 80,
     display: 'flex',
     alignItems: 'center',
     padding: '0 24px',
-    borderBottom: '1px solid #1e293b'
+    borderBottom: '1px solid #1e293b',
+    gap: '12px'
+  },
+  logoText: {
+    fontSize: '18px',
+    fontWeight: '700',
+    color: '#fff'
   },
   logo: { 
-    height: 48, 
-    width: 48, 
+    height: 40, 
+    width: 40, 
     objectFit: 'contain', 
-    borderRadius: '12px', // Modern squircle look
+    borderRadius: '10px',
     backgroundColor: '#fff',
     padding: '4px'
   },
@@ -101,34 +157,53 @@ const styles = {
     display: 'flex', 
     flexDirection: 'column',
     height: '100vh',
+    width: '100%',
     overflow: 'hidden' 
   },
   header: {
     height: 72,
     background: 'rgba(255, 255, 255, 0.8)',
-    backdropFilter: 'blur(8px)', // Modern glass effect
+    backdropFilter: 'blur(8px)',
     borderBottom: '1px solid #e2e8f0',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end', // Aligned to end since search was removed
-    padding: '0 32px',
+    justifyContent: 'space-between', // Changed to accommodate menu button
+    padding: '0 24px',
     zIndex: 9
   },
-  logoutBtn: {
-    padding: '10px 20px',
-    background: '#fee2e2', // Light red background
-    color: '#dc2626', // Bold red text
-    borderRadius: '10px',
+  menuBtn: {
+    background: '#f1f5f9',
     border: 'none',
-    fontSize: '14px',
+    fontSize: '24px',
+    borderRadius: '8px',
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    color: '#0f172a'
+  },
+  headerRight: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-end'
+  },
+  logoutBtn: {
+    padding: '8px 16px',
+    background: '#fee2e2',
+    color: '#dc2626',
+    borderRadius: '8px',
+    border: 'none',
+    fontSize: '13px',
     fontWeight: '600',
     cursor: 'pointer',
     transition: 'background 0.2s ease'
   },
   content: {
-    padding: '32px',
     overflowY: 'auto',
-    flex: 1
+    flex: 1,
+    WebkitOverflowScrolling: 'touch', // Smooth scrolling for iOS
   }
 };
 

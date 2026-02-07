@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
@@ -11,8 +11,17 @@ const AdminLoginPage = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 960);
+  
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // Handle responsiveness
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 960);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -41,15 +50,42 @@ const AdminLoginPage = () => {
     <div style={styles.page}>
       <div style={styles.meshGradient} />
 
-      <div style={styles.contentWrapper}>
-        {/* Left Side: Branding with Bigger Logo */}
-        <div style={styles.brandSection}>
-          <div style={styles.logoContainer}>
-            <img src={nsutLogo} alt="NSUT Logo" style={styles.mainLogo} />
+      <div style={{
+        ...styles.contentWrapper,
+        flexDirection: isMobile ? 'column' : 'row',
+        textAlign: isMobile ? 'center' : 'left',
+        gap: isMobile ? '32px' : '60px',
+      }}>
+        
+        {/* Left Side: Branding */}
+        <div style={{
+          ...styles.brandSection,
+          alignItems: isMobile ? 'center' : 'flex-start',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <div style={{
+            ...styles.logoContainer,
+            width: isMobile ? '120px' : '160px',
+            height: isMobile ? '120px' : '160px',
+            borderRadius: isMobile ? '24px' : '40px',
+            marginBottom: isMobile ? '20px' : '32px',
+          }}>
+            <img src={nsutLogo} alt="NSUT Logo" style={{
+              ...styles.mainLogo,
+              width: isMobile ? '80px' : '120px'
+            }} />
           </div>
           <div style={styles.brandTextWrapper}>
-            <h1 style={styles.brandTitle}>Admin Portal</h1>
-            <p style={styles.brandSubtitle}>
+            <h1 style={{
+              ...styles.brandTitle,
+              fontSize: isMobile ? '40px' : '64px',
+              letterSpacing: isMobile ? '-1px' : '-3px',
+            }}>Admin Portal</h1>
+            <p style={{
+              ...styles.brandSubtitle,
+              fontSize: isMobile ? '16px' : '20px',
+            }}>
               <span style={styles.highlightText}>NSUT BTP Academic Operations</span>
               <br /> Centralized Project Management System
             </p>
@@ -57,7 +93,13 @@ const AdminLoginPage = () => {
         </div>
 
         {/* Right Side: Login Card */}
-        <div style={styles.loginCard}>
+        <div style={{
+          ...styles.loginCard,
+          width: isMobile ? '100%' : '440px',
+          maxWidth: isMobile ? '400px' : '440px',
+          padding: isMobile ? '32px 24px' : '56px',
+          borderRadius: isMobile ? '30px' : '40px',
+        }}>
           <div style={styles.cardHeader}>
             <h2 style={styles.signInText}>Admin Access</h2>
             <p style={styles.signInSub}>Use your administrative credentials</p>
@@ -100,8 +142,6 @@ const AdminLoginPage = () => {
               {loading ? 'Authorizing...' : 'Login'}
             </button>
           </form>
-          
-          
         </div>
       </div>
     </div>
@@ -110,7 +150,7 @@ const AdminLoginPage = () => {
 
 const styles = {
   page: {
-    height: '100vh',
+    minHeight: '100vh',
     width: '100vw',
     backgroundColor: '#ffffff',
     display: 'flex',
@@ -118,7 +158,9 @@ const styles = {
     alignItems: 'center',
     fontFamily: '"Plus Jakarta Sans", sans-serif',
     position: 'relative',
-    overflow: 'hidden',
+    overflowX: 'hidden',
+    padding: '40px 20px',
+    boxSizing: 'border-box',
   },
   meshGradient: {
     position: 'absolute',
@@ -137,44 +179,34 @@ const styles = {
   },
   contentWrapper: {
     display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '85%',
+    justifyContent: 'center',
+    width: '100%',
     maxWidth: '1200px',
     zIndex: 1,
-    gap: '60px',
   },
   brandSection: {
     flex: 1,
-    textAlign: 'left',
   },
   logoContainer: {
-    width: '160px', // Bada container
-    height: '160px',
     backgroundColor: '#fff',
-    borderRadius: '40px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     boxShadow: '0 30px 60px -12px rgba(0,0,0,0.12)',
-    marginBottom: '32px',
     border: '1px solid #f1f5f9',
+    boxSizing: 'border-box',
   },
   mainLogo: {
-    width: '120px', // Bada logo size
     height: 'auto',
   },
   brandTitle: {
-    fontSize: '64px',
     fontWeight: '900',
     color: '#0f172a',
     margin: 0,
-    letterSpacing: '-3px',
-    lineHeight: '0.9',
+    lineHeight: '1',
   },
   brandSubtitle: {
-    fontSize: '20px',
     color: '#475569',
     lineHeight: '1.5',
     marginTop: '16px',
@@ -185,16 +217,14 @@ const styles = {
     borderBottom: '3px solid #cbd5e1',
   },
   loginCard: {
-    width: '440px',
     backgroundColor: 'rgba(255, 255, 255, 0.98)',
     backdropFilter: 'blur(20px)',
-    borderRadius: '40px',
-    padding: '56px',
     boxShadow: '0 40px 100px -20px rgba(0, 0, 0, 0.15)',
     border: '1px solid #ffffff',
+    boxSizing: 'border-box',
   },
   cardHeader: {
-    marginBottom: '40px',
+    marginBottom: '32px',
   },
   signInText: {
     fontSize: '28px',
@@ -210,7 +240,7 @@ const styles = {
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
+    gap: '20px',
   },
   inputWrapper: {
     display: 'flex',
@@ -218,7 +248,7 @@ const styles = {
     gap: '10px',
   },
   label: {
-    fontSize: '12px',
+    fontSize: '11px',
     fontWeight: '800',
     color: '#1e293b',
     textTransform: 'uppercase',
@@ -227,19 +257,14 @@ const styles = {
   },
   input: {
     width: '100%',
-    padding: '18px',
-    borderRadius: '16px',
+    padding: '16px',
+    borderRadius: '14px',
     border: '2px solid #f1f5f9',
     backgroundColor: '#f8fafc',
     fontSize: '15px',
     color: '#0f172a',
     outline: 'none',
-    transition: '0.2s all ease',
     boxSizing: 'border-box',
-    '&:focus': {
-      borderColor: '#0f172a',
-      backgroundColor: '#fff',
-    }
   },
   errorBanner: {
     backgroundColor: '#fff1f2',
@@ -253,8 +278,8 @@ const styles = {
   },
   btn: {
     marginTop: '12px',
-    padding: '20px',
-    borderRadius: '18px',
+    padding: '18px',
+    borderRadius: '16px',
     border: 'none',
     background: '#0f172a', 
     color: '#fff',
@@ -262,12 +287,11 @@ const styles = {
     fontWeight: '700',
     cursor: 'pointer',
     boxShadow: '0 20px 40px -10px rgba(15, 23, 42, 0.3)',
-    transition: 'all 0.2s ease',
   },
   btnLoading: {
     backgroundColor: '#94a3b8',
-    padding: '20px',
-    borderRadius: '18px',
+    padding: '18px',
+    borderRadius: '16px',
     border: 'none',
     color: '#fff',
     width: '100%',

@@ -75,14 +75,16 @@ const styles = {
   wrapper: {
     background: '#ffffff',
     borderRadius: '20px',
-    padding: '32px',
+    padding: 'clamp(16px, 5vw, 32px)',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
     border: '1px solid #f1f5f9',
     maxWidth: '600px',
-    margin: '0 auto'
+    margin: '20px auto',
+    width: 'calc(100% - 32px)',
+    boxSizing: 'border-box'
   },
   title: { 
-    fontSize: '22px', 
+    fontSize: 'clamp(18px, 4vw, 22px)', 
     fontWeight: '700', 
     marginBottom: '20px', 
     color: '#0f172a',
@@ -94,8 +96,10 @@ const styles = {
     marginBottom: '24px',
     fontSize: '14px',
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
-    gap: '8px'
+    gap: '8px',
+    wordBreak: 'break-word'
   },
   activeSession: {
     background: '#eff6ff',
@@ -113,16 +117,18 @@ const styles = {
     gap: '20px' 
   },
   fileInput: {
-    padding: '40px 20px',
+    padding: 'clamp(30px, 8vw, 50px) 20px',
     border: '2px dashed #e2e8f0',
     borderRadius: '16px',
     background: '#f8fafc',
     cursor: 'pointer',
     textAlign: 'center',
-    fontSize: '14px',
+    fontSize: '16px',
     color: '#64748b',
     transition: 'all 0.2s ease-in-out',
-    outline: 'none'
+    outline: 'none',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   msg: { 
     fontSize: '14px', 
@@ -131,11 +137,11 @@ const styles = {
     padding: '12px 16px',
     borderRadius: '10px',
     lineHeight: '1.5',
-    borderLeft: '4px solid #4f46e5' // Indigo accent to match button
+    borderLeft: '4px solid #4f46e5'
   },
   btn: {
     marginTop: '8px',
-    padding: '12px 0',
+    padding: '14px 0',
     borderRadius: '12px',
     border: 'none',
     background: '#4f46e5',
@@ -146,7 +152,8 @@ const styles = {
     transition: 'all 0.2s',
     boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)',
     display: 'block',
-    width: '100%' // Full width button looks better for single-action forms
+    width: '100%',
+    WebkitTapHighlightColor: 'transparent'
   },
   disabledBtn: {
     background: '#94a3b8',

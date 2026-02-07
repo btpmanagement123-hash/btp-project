@@ -166,12 +166,15 @@ const styles = {
   wrapper: {
     background: '#ffffff',
     borderRadius: '20px',
-    padding: '32px',
+    padding: 'clamp(16px, 5vw, 32px)', // Scales padding based on screen size
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
-    border: '1px solid #f1f5f9'
+    border: '1px solid #f1f5f9',
+    margin: '10px',
+    maxWidth: '100%',
+    overflowX: 'hidden' // Prevents horizontal scroll on the main container
   },
   title: { 
-    fontSize: '22px', 
+    fontSize: 'clamp(18px, 4vw, 22px)', 
     fontWeight: '700', 
     marginBottom: '24px', 
     color: '#0f172a',
@@ -179,12 +182,17 @@ const styles = {
   },
   filtersRow: {
     display: 'flex',
-    gap: '20px',
+    flexWrap: 'wrap', // Key for responsiveness: wraps items to next line
+    gap: '16px',
     marginBottom: '24px',
     alignItems: 'flex-end',
     padding: '16px',
     background: '#f8fafc',
     borderRadius: '12px'
+  },
+  filterItem: {
+    flex: '1 1 200px', // Allows items to grow and shrink, but stay around 200px
+    minWidth: '0'     // Prevents flex items from overflowing
   },
   label: { 
     fontSize: '12px', 
@@ -195,35 +203,43 @@ const styles = {
     textTransform: 'uppercase'
   },
   select: {
-    padding: '8px 12px',
+    width: '100%', // Take up the full width of the filterItem container
+    padding: '10px 12px',
     borderRadius: '8px',
     border: '1px solid #e2e8f0',
     fontSize: '14px',
     color: '#334155',
     background: '#fff',
-    minWidth: '140px',
     outline: 'none',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    appearance: 'none' // Better mobile rendering
   },
   search: {
     width: '100%',
-    padding: '8px 16px',
+    padding: '10px 16px',
     borderRadius: '8px',
     border: '1px solid #e2e8f0',
     fontSize: '14px',
     outline: 'none',
-    transition: 'border-color 0.2s'
+    transition: 'border-color 0.2s',
+    boxSizing: 'border-box'
   },
-  // Unified Table Styling
+  // Table Container (Essential for mobile)
+  tableWrapper: {
+    width: '100%',
+    overflowX: 'auto', // Adds horizontal scroll only for the table on small screens
+    WebkitOverflowScrolling: 'touch'
+  },
   table: { 
     width: '100%', 
+    minWidth: '600px', // Ensures table doesn't get squashed too thin
     borderCollapse: 'separate', 
-    borderSpacing: '0 8px', // Creates a "card" look for rows
+    borderSpacing: '0 8px',
     fontSize: '14px' 
   },
   sessionsBox: {
     marginTop: '20px',
-    padding: '20px',
+    padding: 'clamp(12px, 3vw, 20px)',
     borderRadius: '16px',
     background: '#ffffff',
     border: '1px solid #e2e8f0',
@@ -236,7 +252,7 @@ const styles = {
     textAlign: 'left'
   },
   deleteBtn: {
-    padding: '6px 14px',
+    padding: '8px 14px',
     borderRadius: '6px',
     border: '1px solid #fecaca',
     background: '#fef2f2',
@@ -244,7 +260,7 @@ const styles = {
     fontSize: '12px',
     fontWeight: '600',
     cursor: 'pointer',
-    transition: 'all 0.2s'
+    whiteSpace: 'nowrap' // Keeps text on one line
   }
 };
 

@@ -29,22 +29,23 @@ const AdminSettingsHome = () => {
 
 const styles = {
   title: { 
-    fontSize: '24px', 
+    fontSize: 'clamp(20px, 5vw, 24px)', 
     fontWeight: '700', 
     marginBottom: '28px', 
     color: '#0f172a',
-    letterSpacing: '-0.02em'
+    letterSpacing: '-0.02em',
+    padding: '0 4px'
   },
   grid: {
     display: 'grid',
-    // Responsive: stacks on mobile, side-by-side on desktop
-    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-    gap: '24px'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+    gap: 'clamp(16px, 3vw, 24px)',
+    width: '100%'
   },
   card: {
     background: '#ffffff',
     borderRadius: '20px',
-    padding: '30px',
+    padding: 'clamp(20px, 4vw, 30px)', 
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
     cursor: 'pointer',
     border: '1px solid #f1f5f9',
@@ -52,20 +53,21 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    // Logic note: To get a real "hover" lift, you'd usually use a CSS class,
-    // but this static style creates a very strong "button" feel.
+    boxSizing: 'border-box',
+    height: '100%' 
   },
   icon: { 
-    fontSize: '32px', 
+    fontSize: '28px', 
     marginBottom: '16px',
     background: '#f8fafc',
-    width: '60px',
-    height: '60px',
+    width: '56px',
+    height: '56px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '14px',
-    border: '1px solid #e2e8f0'
+    border: '1px solid #e2e8f0',
+    flexShrink: 0 
   },
   cardTitle: { 
     fontSize: '18px', 
@@ -77,8 +79,9 @@ const styles = {
     fontSize: '14px', 
     color: '#64748b', 
     lineHeight: '1.6',
-    maxWidth: '280px' 
+    width: '100%' 
   }
 };
 
 export default AdminSettingsHome;
+

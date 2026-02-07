@@ -75,12 +75,12 @@ const AdminAccountsPage = () => {
 
 const styles = {
   container: {
-    padding: '16px', // Better padding for mobile screens
+    padding: '16px',
     maxWidth: '1200px',
     margin: '0 auto',
   },
   title: { 
-    fontSize: 'clamp(20px, 5vw, 24px)', // Fluid typography
+    fontSize: 'clamp(20px, 5vw, 24px)', 
     fontWeight: '700', 
     marginBottom: '24px', 
     color: '#111827',
@@ -88,8 +88,6 @@ const styles = {
   },
   topGrid: {
     display: 'grid',
-    // On very small screens (under 400px), it will stack. 
-    // Otherwise, it sits side-by-side.
     gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
     gap: '16px',
     marginBottom: '32px'
