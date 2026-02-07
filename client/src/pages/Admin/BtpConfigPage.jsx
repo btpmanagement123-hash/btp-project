@@ -163,17 +163,20 @@ const styles = {
   page: {
     maxWidth: '650px',
     margin: '0 auto',
-    padding: '24px 16px'
+    padding: 'clamp(12px, 4vw, 24px) 16px',
+    boxSizing: 'border-box'
   },
   wrapper: {
     background: '#ffffff',
     borderRadius: '20px',
-    padding: '32px',
+    padding: 'clamp(20px, 6vw, 32px)',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
-    border: '1px solid #f1f5f9'
+    border: '1px solid #f1f5f9',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   title: {
-    fontSize: '22px',
+    fontSize: 'clamp(18px, 5vw, 22px)',
     fontWeight: '700',
     marginBottom: '8px',
     textAlign: 'center',
@@ -186,6 +189,7 @@ const styles = {
     marginBottom: '28px',
     color: '#64748b',
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px'
@@ -197,6 +201,7 @@ const styles = {
     borderRadius: '8px',
     border: '1px solid #e0f2fe',
     fontWeight: '600',
+    whiteSpace: 'nowrap'
   },
   form: {
     display: 'flex',
@@ -213,16 +218,19 @@ const styles = {
     padding: '12px 14px',
     borderRadius: '10px',
     border: '1px solid #e2e8f0',
-    fontSize: '14px',
+    fontSize: '16px',
     background: '#fcfcfd',
     outline: 'none',
     transition: 'border-color 0.2s ease',
-    color: '#1e293b'
+    color: '#1e293b',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   row: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '20px'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
+    gap: '20px',
+    width: '100%'
   },
   col: {
     display: 'flex',
@@ -237,7 +245,8 @@ const styles = {
     borderRadius: '8px',
     border: '1px solid #d1fae5',
     textAlign: 'center',
-    fontWeight: '500'
+    fontWeight: '500',
+    wordBreak: 'break-word'
   },
   error: {
     fontSize: '14px',
@@ -247,20 +256,23 @@ const styles = {
     borderRadius: '8px',
     border: '1px solid #fee2e2',
     textAlign: 'center',
-    fontWeight: '500'
+    fontWeight: '500',
+    wordBreak: 'break-word'
   },
   submitBtn: {
     marginTop: '12px',
     padding: '14px 0',
     borderRadius: '12px',
     border: 'none',
-    background: '#0f172a', // Matches the AdminLayout sidebar
+    background: '#0f172a',
     color: '#ffffff',
     fontWeight: '600',
     fontSize: '15px',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    width: '100%',
+    WebkitTapHighlightColor: 'transparent'
   }
 };
 

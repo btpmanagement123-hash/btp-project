@@ -76,14 +76,16 @@ const styles = {
   wrapper: {
     background: '#ffffff',
     borderRadius: '20px',
-    padding: '32px',
+    padding: 'clamp(16px, 5vw, 32px)',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
     border: '1px solid #f1f5f9',
-    maxWidth: '600px', // Keeps the upload area focused
-    margin: '0 auto'
+    maxWidth: '600px',
+    margin: '20px auto',
+    width: 'calc(100% - 32px)', 
+    boxSizing: 'border-box'
   },
   title: { 
-    fontSize: '22px', 
+    fontSize: 'clamp(18px, 4vw, 22px)', 
     fontWeight: '700', 
     marginBottom: '20px', 
     color: '#0f172a',
@@ -96,8 +98,11 @@ const styles = {
     background: '#f0f9ff',
     border: '1px solid #e0f2fe',
     color: '#0369a1',
-    fontSize: '14px',
-    marginBottom: '24px'
+    fontSize: '13px', 
+    marginBottom: '24px',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
+    wordBreak: 'break-word'
   },
   errorBanner: {
     padding: '12px 16px',
@@ -107,7 +112,8 @@ const styles = {
     color: '#b91c1c',
     fontSize: '14px',
     fontWeight: '500',
-    marginBottom: '24px'
+    marginBottom: '24px',
+    wordWrap: 'break-word'
   },
   form: { 
     display: 'flex', 
@@ -115,13 +121,15 @@ const styles = {
     gap: '20px' 
   },
   fileInput: {
-    padding: '30px',
+    padding: 'clamp(30px, 8vw, 50px) 20px',
     border: '2px dashed #e2e8f0',
     borderRadius: '12px',
     background: '#f8fafc',
     cursor: 'pointer',
     textAlign: 'center',
-    transition: 'border-color 0.2s ease'
+    transition: 'border-color 0.2s ease',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   msg: { 
     fontSize: '14px', 
@@ -129,10 +137,11 @@ const styles = {
     background: '#f1f5f9',
     padding: '12px',
     borderRadius: '8px',
-    borderLeft: '4px solid #64748b'
+    borderLeft: '4px solid #64748b',
+    lineHeight: '1.5'
   },
   btn: {
-    padding: '12px 24px',
+    padding: '14px 24px', 
     borderRadius: '10px',
     border: 'none',
     background: '#0f172a', 
@@ -144,13 +153,15 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    opacity: 1,
+    width: '100%', 
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    WebkitTapHighlightColor: 'transparent'
   },
   disabledBtn: {
     background: '#94a3b8',
     cursor: 'not-allowed',
-    boxShadow: 'none'
+    boxShadow: 'none',
+    opacity: '0.7'
   }
 };
 

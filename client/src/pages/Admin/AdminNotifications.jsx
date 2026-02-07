@@ -101,18 +101,21 @@ const styles = {
   wrapper: {
     background: '#ffffff',
     borderRadius: '20px',
-    padding: '32px',
+    padding: 'clamp(16px, 5vw, 32px)', 
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
     border: '1px solid #f1f5f9',
-    maxWidth: '800px', // Centers the form for better readability
-    margin: '0 auto'
+    maxWidth: '800px',
+    margin: '20px auto', 
+    width: 'calc(100% - 32px)',
+    boxSizing: 'border-box'
   },
   title: { 
-    fontSize: '22px', 
+    fontSize: 'clamp(18px, 4vw, 22px)', 
     fontWeight: '700', 
     marginBottom: '24px', 
     color: '#0f172a',
-    letterSpacing: '-0.02em'
+    letterSpacing: '-0.02em',
+    textAlign: 'left'
   },
   form: { 
     display: 'flex', 
@@ -121,8 +124,9 @@ const styles = {
   },
   row: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '20px'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '20px',
+    width: '100%'
   },
   col: { 
     display: 'flex', 
@@ -139,23 +143,24 @@ const styles = {
     padding: '12px 16px',
     borderRadius: '10px',
     border: '1px solid #e2e8f0',
-    fontSize: '14px',
+    fontSize: '16px', 
     color: '#1e293b',
     background: '#fcfcfd',
     outline: 'none',
     transition: 'all 0.2s ease',
-    // Focus state logic would usually go in a CSS file, 
-    // but we can make the base state look great here.
+    width: '100%',
+    boxSizing: 'border-box'
   },
   msg: { 
     fontSize: '14px', 
-    color: '#059669', // Default to a success green
+    color: '#059669',
     background: '#ecfdf5',
-    padding: '10px 16px',
+    padding: '12px 16px',
     borderRadius: '8px',
     border: '1px solid #d1fae5',
     textAlign: 'center',
-    fontWeight: '500'
+    fontWeight: '500',
+    wordBreak: 'break-word' 
   },
   btn: {
     marginTop: '12px',
@@ -168,7 +173,9 @@ const styles = {
     fontWeight: '600',
     cursor: 'pointer',
     transition: 'background 0.2s ease',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    width: '100%', 
+    WebkitTapHighlightColor: 'transparent' 
   }
 };
 
