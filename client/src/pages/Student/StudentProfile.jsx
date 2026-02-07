@@ -75,36 +75,45 @@ const StudentProfile = () => {
 };
 
 const styles = {
+  container: {
+    width: '100%',
+    padding: '1.25rem',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    boxSizing: 'border-box'
+  },
   name: { 
-    fontSize: '32px', 
+    fontSize: 'clamp(1.5rem, 6vw, 2rem)', 
     fontWeight: '800', 
     color: '#0f172a',
     letterSpacing: '-0.025em',
     marginBottom: '4px'
   },
   subTitle: { 
-    fontSize: '16px', 
+    fontSize: 'clamp(0.875rem, 4vw, 1rem)', 
     color: '#64748b', 
-    marginBottom: '32px',
-    fontWeight: '500' 
+    marginBottom: '2rem',
+    fontWeight: '500',
+    lineHeight: '1.5'
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-    gap: '24px'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+    gap: '1.5rem'
   },
   card: {
     background: '#ffffff',
-    borderRadius: '24px',
-    padding: '28px',
+    borderRadius: '1.5rem',
+    padding: 'clamp(1rem, 5vw, 1.75rem)',
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03)',
     border: '1px solid #f1f5f9',
-    transition: 'transform 0.2s ease'
+    height: 'fit-content',
+    boxSizing: 'border-box'
   },
   cardTitle: { 
-    fontSize: '13px', 
+    fontSize: '0.8125rem', 
     fontWeight: '700', 
-    marginBottom: '20px', 
+    marginBottom: '1.25rem', 
     color: '#94a3b8',
     textTransform: 'uppercase',
     letterSpacing: '0.05em'
@@ -113,27 +122,32 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    fontSize: '14px',
-    padding: '12px 0',
+    gap: '0.75rem',
+    fontSize: '0.875rem',
+    padding: '0.75rem 0',
     borderBottom: '1px solid #f8fafc'
   },
   label: { 
     color: '#64748b', 
-    fontWeight: '500' 
+    fontWeight: '500',
+    flexShrink: 0 
   },
   value: { 
     fontWeight: '700', 
     color: '#1e293b',
-    textAlign: 'right' 
+    textAlign: 'right',
+    wordBreak: 'break-word'
   },
   badge: {
-    padding: '6px 12px',
+    padding: '0.375rem 0.75rem',
     borderRadius: '8px',
-    fontSize: '12px',
+    fontSize: '0.75rem',
     fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: '0.025em'
+    letterSpacing: '0.025em',
+    whiteSpace: 'nowrap'
   }
 };
+
 
 export default StudentProfile;

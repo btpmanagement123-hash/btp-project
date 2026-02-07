@@ -39,47 +39,68 @@ const StudentNotifications = () => {
 };
 
 const styles = {
-  title: { 
-    fontSize: '24px', 
-    fontWeight: '800', 
-    marginBottom: '20px', 
-    color: '#0f172a',
-    letterSpacing: '-0.025em' 
+
+  container: {
+    padding: '1rem',
+    maxWidth: '800px',
+    width: '100%',
+    boxSizing: 'border-box'
   },
+
+  title: { 
+    fontSize: 'clamp(1.25rem, 5vw, 1.5rem)', 
+    fontWeight: '800', 
+    marginBottom: '1.25rem', 
+    color: '#0f172a',
+    letterSpacing: '-0.025em',
+    textAlign: 'left'
+  },
+
   cardsCol: { 
     display: 'flex', 
     flexDirection: 'column', 
-    gap: '12px' 
+    gap: '0.75rem', 
+    width: '100%'
   },
+
   notificationCard: {
     background: '#ffffff',
-    borderRadius: '16px',
-    padding: '16px 20px',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+    borderRadius: '12px', 
+    padding: '1rem 1.25rem',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
     border: '1px solid #f1f5f9',
-    borderLeft: '4px solid #6366f1', // Indigo accent bar
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-    cursor: 'default'
+    borderLeft: '4px solid #6366f1',
+    width: '100%',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column'
   },
+
   notifTitle: { 
-    fontSize: '15px', 
+    fontSize: '0.9375rem', // 15px
     fontWeight: '700', 
-    marginBottom: '6px', 
-    color: '#1e293b' 
+    marginBottom: '0.375rem', 
+    color: '#1e293b',
+    wordBreak: 'break-word' 
   },
+
   notifMsg: { 
-    fontSize: '14px', 
+    fontSize: '0.875rem', // 14px
     color: '#64748b', 
-    lineHeight: '1.5' 
+    lineHeight: '1.5',
+    overflowWrap: 'anywhere'
   },
+
   empty: { 
     textAlign: 'center',
-    padding: '40px 20px',
+    padding: '2.5rem 1.25rem',
     background: '#f8fafc',
     borderRadius: '16px',
     border: '2px dashed #e2e8f0',
     color: '#94a3b8',
-    fontSize: '14px'
+    fontSize: '0.875rem',
+    width: '100%',
+    boxSizing: 'border-box'
   }
 };
 export default StudentNotifications;

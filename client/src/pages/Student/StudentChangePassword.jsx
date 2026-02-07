@@ -48,7 +48,6 @@ const StudentChangePassword = () => {
     }
   };
 
-  // Professional Eye Icon Component (SVG)
   const EyeIcon = ({ visible }) => (
     visible ? (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -62,7 +61,7 @@ const StudentChangePassword = () => {
       </svg>
     )
   );
-
+  
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Change Password</h2>
@@ -127,15 +126,17 @@ const StudentChangePassword = () => {
 const styles = {
   container: {
     backgroundColor: '#ffffff',
-    padding: '32px 24px',
+    padding: 'clamp(20px, 5vw, 32px) clamp(16px, 4vw, 24px)',
     borderRadius: '16px',
     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-    maxWidth: '400px',
-    margin: '40px auto',
-    fontFamily: 'Inter, system-ui, sans-serif'
+    width: '90%',
+    maxWidth: '420px',
+    margin: 'clamp(20px, 8vh, 60px) auto',
+    fontFamily: 'Inter, system-ui, sans-serif',
+    boxSizing: 'border-box'
   },
   title: { 
-    fontSize: '24px', 
+    fontSize: 'clamp(20px, 4vw, 24px)', 
     fontWeight: '700', 
     marginBottom: '24px', 
     color: '#111827',
@@ -149,18 +150,24 @@ const styles = {
   inputWrapper: {
     position: 'relative',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%'
   },
   input: {
     width: '100%',
     padding: '12px 45px 12px 16px',
     borderRadius: '10px',
     border: '1px solid #d1d5db',
-    fontSize: '15px',
+    fontSize: '15px', // Standard for mobile to prevent iOS zoom
     outline: 'none',
     backgroundColor: '#fff',
-    transition: 'border-color 0.2s ease',
-    boxSizing: 'border-box'
+    transition: 'all 0.2s ease',
+    boxSizing: 'border-box',
+    // Added a focus state for better UX
+    ':focus': {
+      borderColor: '#4f46e5',
+      boxShadow: '0 0 0 3px rgba(79, 70, 229, 0.1)'
+    }
   },
   eyeBtn: {
     position: 'absolute',
@@ -171,12 +178,13 @@ const styles = {
     color: '#9ca3af',
     display: 'flex',
     alignItems: 'center',
-    padding: '0',
-    transition: 'color 0.2s ease'
+    padding: '8px', // Larger hit area for thumbs
+    transition: 'color 0.2s ease',
+    zIndex: 2
   },
   btn: {
     marginTop: '10px',
-    padding: '14px',
+    padding: 'clamp(12px, 3vw, 14px)',
     borderRadius: '10px',
     border: 'none',
     background: '#4f46e5',
@@ -184,8 +192,11 @@ const styles = {
     fontSize: '16px',
     fontWeight: '600',
     cursor: 'pointer',
-    transition: 'background 0.2s ease',
-    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.4)'
+    transition: 'all 0.2s ease',
+    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.4)',
+    width: '100%',
+    // Prevents text selection on double-tap
+    userSelect: 'none'
   },
   error: { 
     fontSize: '13px', 
@@ -193,7 +204,8 @@ const styles = {
     backgroundColor: '#fef2f2', 
     padding: '10px', 
     borderRadius: '8px',
-    border: '1px solid #fee2e2'
+    border: '1px solid #fee2e2',
+    wordBreak: 'break-word' // Prevents layout breaking on long errors
   },
   success: { 
     fontSize: '13px', 
@@ -201,7 +213,8 @@ const styles = {
     backgroundColor: '#ecfdf5', 
     padding: '10px', 
     borderRadius: '8px',
-    border: '1px solid #d1fae5'
+    border: '1px solid #d1fae5',
+    wordBreak: 'break-word'
   }
 };
 

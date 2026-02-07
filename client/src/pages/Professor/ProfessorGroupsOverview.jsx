@@ -64,101 +64,139 @@ const ProfessorGroupsOverview = () => {
 };
 
 const styles = {
+  // Main header styling
   title: { 
-    fontSize: '26px', 
+    fontSize: 'clamp(20px, 5vw, 26px)', // Fluid font size
     fontWeight: '800', 
     color: '#0f172a', 
     letterSpacing: '-0.025em',
-    marginBottom: '4px' 
+    marginBottom: '8px' 
   },
   subtitle: { 
-    fontSize: '15px', 
+    fontSize: 'clamp(14px, 3.5vw, 15px)', 
     color: '#64748b', 
-    marginBottom: '24px',
-    lineHeight: '1.5' 
+    marginBottom: '32px',
+    lineHeight: '1.6' 
   },
+  
+  // Empty state / No groups found
   muted: { 
-    fontSize: '14px', 
+    fontSize: '15px', 
     color: '#94a3b8', 
     textAlign: 'center', 
-    padding: '40px',
+    padding: 'clamp(30px, 8vw, 60px)',
     background: '#f8fafc',
-    borderRadius: '16px',
-    border: '2px dashed #e2e8f0'
+    borderRadius: '20px',
+    border: '2px dashed #e2e8f0',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '12px'
   },
+
   list: {
     marginTop: '12px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '16px'
+    gap: '20px'
   },
+
+  // Main Group Card
   card: {
     display: 'flex',
-    flexWrap: 'wrap', // Better for smaller screens
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: '24px',
+    flexDirection: 'column', // Mobile-first stack
+    gap: '20px',
     background: '#ffffff',
-    borderRadius: '20px',
-    padding: '24px',
+    borderRadius: '24px',
+    padding: 'clamp(16px, 4vw, 28px)',
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03)',
     border: '1px solid #f1f5f9',
-    transition: 'transform 0.2s ease'
+    transition: 'all 0.3s ease',
+    // Desktop layout adjustment:
+    '@media (minWidth: 768px)': {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }
+  },
+
+  groupInfo: {
+    flex: '1',
+    minWidth: '250px'
   },
   groupTitle: { 
     fontSize: '18px', 
     fontWeight: '700', 
     color: '#1e293b', 
-    marginBottom: '8px',
+    marginBottom: '10px',
     lineHeight: '1.4'
   },
   meta: { 
-    fontSize: '13px', 
-    color: '#6366f1', // Indigo to make meta info pop
-    fontWeight: '600',
+    fontSize: '12px', 
+    color: '#4f46e5', // Direct indigo
+    fontWeight: '700',
     backgroundColor: '#eef2ff',
-    padding: '4px 10px',
-    borderRadius: '6px',
-    display: 'inline-block'
+    padding: '6px 12px',
+    borderRadius: '8px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: '0.025em'
   },
+
+  // Responsive Grid for members
   membersCol: {
-    minWidth: '280px',
-    flex: '1',
+    flex: '2',
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-    gap: '10px'
+    // Adapts columns based on available container width
+    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+    gap: '12px',
+    width: '100%'
   },
+
   memberChip: {
     display: 'flex',
     alignItems: 'center',
-    gap: '10px',
-    padding: '10px',
-    borderRadius: '12px',
+    gap: '12px',
+    padding: '12px',
+    borderRadius: '16px',
     background: '#f8fafc',
-    border: '1px solid #eff6ff'
+    border: '1px solid #f1f5f9',
+    transition: 'background 0.2s ease'
   },
+
   initial: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '10px',
-    background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
-    color: '#475569',
+    width: '36px',
+    height: '36px',
+    borderRadius: '12px',
+    background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', // Colorful initials
+    color: '#ffffff',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '13px',
+    fontSize: '14px',
     fontWeight: '700',
-    border: '1px solid #cbd5e1'
+    flexShrink: 0 // Prevents squishing in tight grids
+  },
+
+  nameStack: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden'
   },
   memberName: { 
     fontSize: '13px', 
     fontWeight: '600', 
-    color: '#334155' 
+    color: '#334155',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   memberRoll: { 
     fontSize: '11px', 
-    color: '#94a3b8',
-    fontWeight: '500' 
+    color: '#64748b',
+    fontWeight: '500',
+    letterSpacing: '0.01em'
   }
 };
 
