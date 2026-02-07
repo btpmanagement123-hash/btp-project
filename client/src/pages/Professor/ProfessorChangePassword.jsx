@@ -123,79 +123,93 @@ const ProfessorChangePassword = () => {
 const styles = {
   wrapper: {
     background: '#ffffff',
-    borderRadius: '16px',
-    padding: '32px 24px',
-    maxWidth: '400px',
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    borderRadius: '20px',
+    // Responsive padding: smaller on mobile, larger on desktop
+    padding: 'clamp(24px, 6vw, 40px) clamp(16px, 5vw, 32px)',
+    // Fluid width with a ceiling
+    width: '90%',
+    maxWidth: '420px',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
     border: '1px solid #f1f5f9',
-    margin: '40px auto',
-    fontFamily: 'Inter, system-ui, sans-serif'
+    margin: 'clamp(20px, 8vh, 60px) auto',
+    fontFamily: '"Inter", system-ui, -apple-system, sans-serif',
+    boxSizing: 'border-box'
   },
   title: { 
-    fontSize: '24px', 
-    fontWeight: '700', 
+    fontSize: 'clamp(20px, 5vw, 24px)', 
+    fontWeight: '800', 
     marginBottom: '8px', 
-    color: '#111827',
-    textAlign: 'center'
+    color: '#0f172a',
+    textAlign: 'center',
+    letterSpacing: '-0.025em'
   },
   subtitle: {
-    fontSize: '13px', 
-    color: '#6b7280', 
-    marginBottom: '24px',
+    fontSize: '14px', 
+    color: '#64748b', 
+    marginBottom: '32px',
     textAlign: 'center',
-    lineHeight: '1.5'
+    lineHeight: '1.6'
   },
   form: { 
     display: 'flex', 
     flexDirection: 'column', 
-    gap: '18px' 
+    gap: '20px' 
   },
   inputWrapper: {
     position: 'relative',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%'
   },
   input: {
     width: '100%',
-    padding: '12px 45px 12px 16px',
-    borderRadius: '10px',
-    border: '1px solid #d1d5db',
-    fontSize: '15px',
+    // Standardizing at 16px font prevents iOS auto-zoom on focus
+    fontSize: '16px',
+    padding: '14px 48px 14px 16px',
+    borderRadius: '12px',
+    border: '1px solid #e2e8f0',
     outline: 'none',
-    backgroundColor: '#fff',
+    backgroundColor: '#f8fafc',
     boxSizing: 'border-box',
-    transition: 'border-color 0.2s ease'
+    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+    color: '#1e293b'
   },
   eyeBtn: {
     position: 'absolute',
-    right: '14px',
+    right: '12px',
     background: 'none',
     border: 'none',
     cursor: 'pointer',
-    color: '#9ca3af',
+    color: '#94a3b8',
     display: 'flex',
     alignItems: 'center',
-    padding: '0'
+    padding: '8px', // Better touch target for mobile
+    zIndex: 2,
+    transition: 'color 0.2s ease'
   },
   msg: { 
     fontSize: '13px', 
-    padding: '10px', 
-    borderRadius: '8px',
+    padding: '12px', 
+    borderRadius: '10px',
     border: '1px solid transparent',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: '500',
+    wordBreak: 'break-word'
   },
   btn: {
     marginTop: '10px',
     padding: '14px',
-    borderRadius: '10px',
+    borderRadius: '12px',
     border: 'none',
     background: '#4f46e5', 
     color: '#ffffff',
     fontWeight: '600',
     fontSize: '16px',
     cursor: 'pointer',
-    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.4)',
-    transition: 'opacity 0.2s ease'
+    boxShadow: '0 10px 15px -3px rgba(79, 70, 229, 0.3)',
+    transition: 'all 0.2s ease',
+    userSelect: 'none',
+    WebkitTapHighlightColor: 'transparent'
   }
 };
 
