@@ -1,125 +1,264 @@
-
+import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useEffect } from 'react';
+import nsutLogo from '../../assets/nsutlogo.png'; 
 
 const StudentLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
-  // 🔐 Route Guard
+ 
   useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 1024;
+      setIsMobile(mobile);
+      if (!mobile) setIsMenuOpen(false);
+    };
+    window.addEventListener('resize', handleResize);
+
     if (!user) {
       navigate('/login', { replace: true });
     } else if (user.role !== 'student') {
       navigate('/', { replace: true });
     }
+
+    return () => window.removeEventListener('resize', handleResize);
   }, [user, navigate]);
 
-  if (!user) return null; // redirect hone tak kuch mat dikhao
+  if (!user) return null;
 
   const handleLogout = () => {
     logout();
     navigate('/login', { replace: true });
   };
 
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   return (
-    <div style={styles.page}>
-      <aside style={styles.sidebar}>
-        <div style={styles.logo}>NSUT</div>
+    <div style={styles.app}>
+      {/* Mobile Overlay */}
+      {isMobile && isMenuOpen && (
+        <div style={styles.overlay} onClick={() => setIsMenuOpen(false)} />
+      )}
+
+      {/* Sidebar - Same logic as Admin */}
+      <aside style={{
+        ...styles.sidebar,
+        transform: isMobile ? (isMenuOpen ? 'translateX(0)' : 'translateX(-100%)') : 'none',
+        position: isMobile ? 'fixed' : 'relative',
+      }}>
+        <div style={styles.logoWrapper}>
+          <img src={nsutLogo} alt="NSUT" style={styles.logo} />
+          <span style={styles.logoText}>Student</span>
+        </div>
 
         <nav style={styles.nav}>
-          <NavLink to="/student" end style={styles.navItem}>
+          <NavLink to="/student" end style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
             Notifications
           </NavLink>
 
-          <NavLink to="/student/profile" style={styles.navItem}>
+          <NavLink to="/student/profile" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
             Profile
           </NavLink>
 
-          <div style={styles.sectionLabel}>Project</div>
+          <div style={styles.sectionLabel}>Project Management</div>
 
-          <NavLink to="/student/project/registration" style={styles.navItem}>
+          <NavLink to="/student/project/registration" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
             Registration
           </NavLink>
 
-          <NavLink to="/student/project/overview" style={styles.navItem}>
-            Project Overview
+          <NavLink to="/student/project/overview" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
+            Overview
           </NavLink>
 
-          <NavLink to="/student/change-password" style={styles.navItem}>
+          <NavLink to="/student/project/invitations" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
+            Invitations
+          </NavLink>
+
+          <div style={styles.sectionLabel}>Account</div>
+          <NavLink to="/student/change-password" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
             Change Password
-          </NavLink>
-
-          <NavLink to="/student/project/invitations" style={styles.navItem}>
-            Group Invitations
           </NavLink>
         </nav>
       </aside>
 
-      <main style={styles.main}>
+      <div style={styles.main}>
         <header style={styles.header}>
-          <button style={styles.logoutBtn} onClick={handleLogout}>
-            Logout
-          </button>
+          {isMobile && (
+            <button onClick={toggleMenu} style={styles.menuBtn}>
+              {isMenuOpen ? '✕' : '☰'}
+            </button>
+          )}
+          
+          <div style={styles.headerRight}>
+            <div style={styles.userInfo}>
+              <span style={styles.userName}>{user.name}</span>
+            </div>
+            <button onClick={handleLogout} style={styles.logoutBtn}>
+              Logout
+            </button>
+          </div>
         </header>
-
-        <section style={styles.content}>
+        
+        <main style={{
+          ...styles.content,
+          padding: isMobile ? '20px' : '32px'
+        }}>
           <Outlet />
-        </section>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };
 
 const styles = {
-  page: { display: 'flex', height: '100vh', background: '#f3f4f6' },
+  app: { 
+    display: 'flex', 
+    minHeight: '100vh', 
+    background: '#f8fafc',
+    fontFamily: '"Inter", system-ui, sans-serif',
+    position: 'relative',
+    overflow: 'hidden'
+  },
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(15, 23, 42, 0.4)',
+    backdropFilter: 'blur(4px)',
+    zIndex: 15,
+  },
   sidebar: {
-    width: 220,
-    background: '#050816',
-    color: '#fff',
+    width: 260,
+    background: '#0f172a',
+    color: '#f1f5f9',
     display: 'flex',
     flexDirection: 'column',
-    padding: 16
+    boxShadow: '4px 0 10px rgba(0,0,0,0.05)',
+    zIndex: 20,
+    transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    height: '100vh',
   },
-  logo: { fontWeight: 700, marginBottom: 24 },
-  nav: { display: 'flex', flexDirection: 'column', gap: 8 },
-  navItem: ({ isActive }) => ({
-    padding: '8px 10px',
-    borderRadius: 8,
-    color: '#e5e7eb',
-    textDecoration: 'none',
-    background: isActive ? '#111827' : 'transparent',
-    fontSize: 14
-  }),
-  sectionLabel: {
-    marginTop: 16,
-    marginBottom: 4,
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: 0.08,
-    color: '#9ca3af'
-  },
-  main: { flex: 1, display: 'flex', flexDirection: 'column' },
-  header: {
-    height: 56,
-    background: '#ffffff',
+  logoWrapper: {
+    height: 80,
     display: 'flex',
-    justifyContent: 'flex-end',
     alignItems: 'center',
     padding: '0 24px',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+    borderBottom: '1px solid #1e293b',
+    gap: '12px'
+  },
+  logoText: {
+    fontSize: '18px',
+    fontWeight: '700',
+    color: '#fff'
+  },
+  logo: { 
+    height: 40, 
+    width: 40, 
+    objectFit: 'contain', 
+    borderRadius: '10px',
+    backgroundColor: '#fff',
+    padding: '4px'
+  },
+  nav: { 
+    marginTop: '16px', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    gap: '4px',
+    padding: '0 12px',
+    overflowY: 'auto'
+  },
+  navItem: ({ isActive }) => ({
+    padding: '12px 16px',
+    color: isActive ? '#fff' : '#94a3b8',
+    fontSize: '14px',
+    fontWeight: isActive ? '600' : '500',
+    textDecoration: 'none',
+    borderRadius: '8px',
+    background: isActive ? '#1e293b' : 'transparent',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+  }),
+  sectionLabel: {
+    marginTop: '20px',
+    marginBottom: '8px',
+    padding: '0 16px',
+    fontSize: '11px',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    color: '#475569'
+  },
+  main: { 
+    flex: 1, 
+    display: 'flex', 
+    flexDirection: 'column',
+    height: '100vh',
+    width: '100%',
+    overflow: 'hidden' 
+  },
+  header: {
+    height: 72,
+    background: 'rgba(255, 255, 255, 0.8)',
+    backdropFilter: 'blur(8px)',
+    borderBottom: '1px solid #e2e8f0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0 24px',
+    zIndex: 9
+  },
+  menuBtn: {
+    background: '#f1f5f9',
+    border: 'none',
+    fontSize: '24px',
+    borderRadius: '8px',
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    color: '#0f172a'
+  },
+  headerRight: {
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: '16px'
+  },
+  userInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'right'
+  },
+  userName: {
+    fontSize: '14px',
+    fontWeight: '600',
+    color: '#1e293b'
   },
   logoutBtn: {
-    padding: '6px 14px',
-    borderRadius: 999,
+    padding: '8px 16px',
+    background: '#fee2e2',
+    color: '#dc2626',
+    borderRadius: '8px',
     border: 'none',
-    background: '#ef4444',
-    color: '#fff',
-    fontSize: 13,
-    cursor: 'pointer'
+    fontSize: '13px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'background 0.2s ease'
   },
-  content: { flex: 1, padding: 24, overflowY: 'auto' }
+  content: {
+    overflowY: 'auto',
+    flex: 1,
+    WebkitOverflowScrolling: 'touch',
+  }
 };
 
 export default StudentLayout;
