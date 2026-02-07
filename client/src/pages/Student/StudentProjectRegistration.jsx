@@ -203,64 +203,85 @@ const StudentProjectRegistration = () => {
 
 const styles = {
   title: { 
-    fontSize: '26px', 
+    fontSize: 'clamp(1.25rem, 5vw, 1.625rem)', 
     fontWeight: '800', 
-    marginBottom: '24px', 
+    marginBottom: '1.5rem', 
     color: '#0f172a',
     letterSpacing: '-0.025em'
   },
   card: {
     background: '#ffffff',
     borderRadius: '16px',
-    padding: '24px',
-    marginBottom: '20px',
+    padding: 'clamp(1rem, 4vw, 1.5rem)',
+    marginBottom: '1.25rem',
     border: '1px solid #f1f5f9',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03)'
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03)',
+    boxSizing: 'border-box'
   },
   cardTitle: { 
-    fontSize: '16px', 
+    fontSize: '1rem', 
     fontWeight: '700', 
-    marginBottom: '16px', 
+    marginBottom: '1rem', 
     color: '#334155',
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'wrap',
     gap: '8px'
   },
   cardHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: '20px',
-    paddingBottom: '12px',
+    flexWrap: 'wrap',
+    gap: '10px',
+    marginBottom: '1.25rem',
+    paddingBottom: '0.75rem',
     borderBottom: '1px solid #f8fafc'
   },
   smallMuted: { 
-    fontSize: '12px', 
+    fontSize: '0.75rem', 
     color: '#64748b',
     backgroundColor: '#f1f5f9',
     padding: '4px 10px',
-    borderRadius: '6px'
+    borderRadius: '6px',
+    whiteSpace: 'nowrap'
   },
   row: {
     display: 'flex',
     justifyContent: 'space-between',
-    fontSize: '14px',
-    padding: '10px 0',
+    alignItems: 'center',
+    gap: '0.75rem',
+    fontSize: '0.875rem',
+    padding: '0.625rem 0',
     borderBottom: '1px solid #f8fafc'
   },
-  label: { color: '#94a3b8', fontWeight: '500' },
-  value: { color: '#1e293b', fontWeight: '600' },
+  label: { 
+    color: '#94a3b8', 
+    fontWeight: '500',
+    flexShrink: 0 
+  },
+  value: { 
+    color: '#1e293b', 
+    fontWeight: '600',
+    textAlign: 'right',
+    wordBreak: 'break-word'
+  },
   memberRow: {
     display: 'flex',
-    gap: '16px',
-    marginBottom: '16px',
-    padding: '16px',
+    flexDirection: 'column', // Stack on mobile
+    gap: '12px',
+    marginBottom: '1rem',
+    padding: '1rem',
     background: '#f8fafc',
     borderRadius: '12px',
-    border: '1px solid #eff6ff'
+    border: '1px solid #eff6ff',
+    // Media query logic usually happens in CSS, but for JS objects:
+    '@media (min-width: 640px)': {
+      flexDirection: 'row'
+    }
   },
   fieldLabel: {
-    fontSize: '12px',
+    fontSize: '0.75rem',
     fontWeight: '700',
     color: '#475569',
     marginBottom: '6px',
@@ -272,7 +293,7 @@ const styles = {
     padding: '11px 14px',
     borderRadius: '10px',
     border: '1px solid #e2e8f0',
-    fontSize: '14px',
+    fontSize: '0.875rem',
     backgroundColor: '#ffffff',
     color: '#1e293b',
     transition: 'all 0.2s ease',
@@ -280,49 +301,51 @@ const styles = {
     boxSizing: 'border-box'
   },
   addBtn: {
-    marginTop: '8px',
+    marginTop: '0.5rem',
     padding: '10px 16px',
     borderRadius: '10px',
     border: '2px dashed #cbd5e1',
     background: 'transparent',
     color: '#6366f1',
-    fontSize: '14px',
+    fontSize: '0.875rem',
     fontWeight: '600',
     cursor: 'pointer',
     width: '100%',
+    boxSizing: 'border-box',
     transition: 'all 0.2s ease'
   },
   error: { 
-    fontSize: '14px', 
+    fontSize: '0.875rem', 
     color: '#ef4444', 
     backgroundColor: '#fef2f2', 
-    padding: '12px', 
+    padding: '0.75rem', 
     borderRadius: '10px',
     borderLeft: '4px solid #ef4444',
-    marginBottom: '16px'
+    marginBottom: '1rem'
   },
   success: { 
-    fontSize: '14px', 
+    fontSize: '0.875rem', 
     color: '#10b981', 
     backgroundColor: '#f0fdf4', 
-    padding: '12px', 
+    padding: '0.75rem', 
     borderRadius: '10px', 
     borderLeft: '4px solid #10b981',
-    marginBottom: '16px'
+    marginBottom: '1rem'
   },
   submitBtn: {
-    marginTop: '12px',
+    marginTop: '0.75rem',
     padding: '14px 28px',
     borderRadius: '12px',
     border: 'none',
     background: '#4f46e5',
     color: '#ffffff',
     fontWeight: '700',
-    fontSize: '16px',
+    fontSize: '1rem',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
     boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.3)',
-    width: '100%'
+    width: '100%',
+    boxSizing: 'border-box'
   }
 };
 
