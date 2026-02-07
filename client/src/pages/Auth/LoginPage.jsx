@@ -15,8 +15,13 @@ const LoginPage = () => {
   const [sessions, setSessions] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 850);
 
+  // Handle window resizing for responsive layout adjustments
   useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 850);
+    window.addEventListener('resize', handleResize);
+    
     const loadSessions = async () => {
       try {
         const res = await api.get('/auth/sessions');
@@ -26,6 +31,8 @@ const LoginPage = () => {
       }
     };
     loadSessions();
+    
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -52,13 +59,34 @@ const LoginPage = () => {
 
   return (
     <div style={styles.page}>
-      <div style={styles.contentWrapper}>
+      <div style={{
+        ...styles.contentWrapper,
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? '40px' : '80px',
+        padding: isMobile ? '20px' : '40px',
+      }}>
         
         {/* Left Side: Branding */}
-        <div style={styles.brandSection}>
-          <img src={nsutLogo} alt="NSUT Logo" style={styles.mainLogo} />
-          <div style={styles.brandTextWrapper}>
-            <h1 style={styles.brandTitle}>BTP Portal</h1>
+        <div style={{
+          ...styles.brandSection,
+          textAlign: isMobile ? 'center' : 'left',
+          alignItems: isMobile ? 'center' : 'flex-start'
+        }}>
+          <img src={nsutLogo} alt="NSUT Logo" style={{
+            ...styles.mainLogo,
+            width: isMobile ? '120px' : '180px'
+          }} />
+          <div style={{
+            ...styles.brandTextWrapper,
+            borderLeft: isMobile ? 'none' : '4px solid #4f46e5',
+            borderTop: isMobile ? '4px solid #4f46e5' : 'none',
+            paddingLeft: isMobile ? '0' : '20px',
+            paddingTop: isMobile ? '15px' : '0',
+          }}>
+            <h1 style={{
+              ...styles.brandTitle,
+              fontSize: isMobile ? '32px' : '42px'
+            }}>BTP Portal</h1>
             <p style={styles.brandSubtitle}>
               Netaji Subhas University of Technology <br />
               <span style={styles.departmentText}>Academic Management & Research</span>
@@ -67,7 +95,12 @@ const LoginPage = () => {
         </div>
 
         {/* Right Side: Login Card */}
-        <div style={styles.loginCard}>
+        <div style={{
+          ...styles.loginCard,
+          width: isMobile ? '100%' : '400px',
+          maxWidth: '450px',
+          padding: isMobile ? '24px' : '40px',
+        }}>
           <div style={styles.cardHeader}>
             <h2 style={styles.signInText}>Welcome Back</h2>
             <p style={styles.signInSub}>Please enter your details to sign in</p>
@@ -146,70 +179,63 @@ const LoginPage = () => {
 
 const styles = {
   page: {
-    height: '100vh',
+    minHeight: '100vh', // Changed from height to minHeight to allow scrolling on mobile
     width: '100vw',
-    backgroundColor: '#ffffff', // Pure white background
+    backgroundColor: '#ffffff',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     fontFamily: '"Inter", "Plus Jakarta Sans", sans-serif',
     margin: 0,
-    padding: 0,
-    overflow: 'hidden',
+    padding: '20px 0', // Add vertical padding for mobile
+    boxSizing: 'border-box',
+    overflowX: 'hidden',
   },
   contentWrapper: {
     display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: '80px',
-    maxWidth: '1000px',
     width: '90%',
-    padding: '40px',
-    // Mobile responsiveness handles via flex-wrap or media queries if needed
+    maxWidth: '1100px',
+    boxSizing: 'border-box',
   },
   brandSection: {
     flex: 1,
-    textAlign: 'left',
     display: 'flex',
     flexDirection: 'column',
     gap: '24px',
   },
   mainLogo: {
-    width: '180px', // Bigger logo
     height: 'auto',
     marginBottom: '8px',
   },
   brandTextWrapper: {
-    borderLeft: '4px solid #4f46e5',
-    paddingLeft: '20px',
+    // Dynamic styles applied in component
   },
   brandTitle: {
-    fontSize: '42px',
     fontWeight: '900',
     color: '#0f172a',
     margin: 0,
     letterSpacing: '-1.5px',
   },
   brandSubtitle: {
-    fontSize: '18px',
+    fontSize: '16px',
     color: '#64748b',
     lineHeight: '1.5',
     margin: '8px 0 0 0',
   },
   departmentText: {
-    fontSize: '14px',
+    fontSize: '12px',
     fontWeight: '500',
     color: '#94a3b8',
     textTransform: 'uppercase',
     letterSpacing: '1px',
   },
   loginCard: {
-    width: '400px',
     backgroundColor: '#ffffff',
     borderRadius: '24px',
-    padding: '40px',
-    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.08)', // Soft elegant shadow
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.08)',
     border: '1px solid #f1f5f9',
+    boxSizing: 'border-box',
   },
   cardHeader: {
     marginBottom: '32px',
@@ -308,7 +334,6 @@ const styles = {
     color: '#fff',
     width: '100%',
   },
-  
 };
 
 export default LoginPage;
