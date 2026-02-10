@@ -19,55 +19,46 @@ const StudentProfile = () => {
     load();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (!student) return <p>Could not load profile.</p>;
+  if (loading) return <p style={styles.smallMuted}>Loading profile...</p>;
+  if (!student) return <p style={styles.smallMuted}>Could not load profile.</p>;
 
   return (
-    <div>
-      <h2 style={styles.name}>{student.name}</h2>
-      <p style={styles.subTitle}>
-        {student.department || 'Department'} · {student.session || 'Session'}
-      </p>
+    <div style={styles.container}>
+      <h2 style={styles.title}>Profile</h2>
 
-      <div style={styles.grid}>
-        <div style={styles.card}>
-          <h3 style={styles.cardTitle}>Academic Details</h3>
-          <div style={styles.row}>
-            <span style={styles.label}>Roll Number</span>
-            <span style={styles.value}>{student.userId || '-'}</span>
-          </div>
-          <div style={styles.row}>
-            <span style={styles.label}>Section</span>
-            <span style={styles.value}>{student.section || '-'}</span>
-          </div>
-          <div style={styles.row}>
-            <span style={styles.label}>Current Semester</span>
-            <span style={styles.value}>{student.semester || '-'}</span>
-          </div>
+      {/* Status Badge Row */}
+      <div style={styles.badgeRow}>
+        <span style={styles.statusBadge(student.isActive)}>
+          {student.isActive ? 'Active' : 'Inactive'}
+        </span>
+        <span style={styles.smallMuted}>
+          {student.department} · {student.session}
+        </span>
+      </div>
+
+      <div style={styles.card}>
+        <h3 style={styles.cardHeading}>{student.name}</h3>
+        
+        {/* Academic Details Section */}
+        <h4 style={styles.sectionTitle}>Academic Details</h4>
+        <div style={styles.metaRow}>
+          <span style={styles.metaLabel}>Roll Number</span>
+          <span style={styles.metaValue}>{student.userId || '-'}</span>
+        </div>
+        <div style={styles.metaRow}>
+          <span style={styles.metaLabel}>Current Semester</span>
+          <span style={styles.metaValue}>{student.semester || '-'}</span>
         </div>
 
-        <div style={styles.card}>
-          <h3 style={styles.cardTitle}>Contact & Status</h3>
-          <div style={styles.row}>
-            <span style={styles.label}>Official Email</span>
-            <span style={styles.value}>{student.email}</span>
-          </div>
-          <div style={styles.row}>
-            <span style={styles.label}>Phone</span>
-            <span style={styles.value}>{student.mobile || '-'}</span>
-          </div>
-          <div style={styles.row}>
-            <span style={styles.label}>Account Status</span>
-            <span
-              style={{
-                ...styles.badge,
-                background: student.isActive ? '#dcfce7' : '#fee2e2',
-                color: student.isActive ? '#16a34a' : '#b91c1c'
-              }}
-            >
-              {student.isActive ? 'Active' : 'Inactive'}
-            </span>
-          </div>
+        {/* Contact Details Section */}
+        <h4 style={{ ...styles.sectionTitle, marginTop: '2rem' }}>Contact Information</h4>
+        <div style={styles.metaRow}>
+          <span style={styles.metaLabel}>Official Email</span>
+          <span style={styles.metaValue}>{student.email}</span>
+        </div>
+        <div style={styles.metaRow}>
+          <span style={styles.metaLabel}>Phone / Mobile</span>
+          <span style={styles.metaValue}>{student.mobile || 'Not provided'}</span>
         </div>
       </div>
     </div>
@@ -77,77 +68,82 @@ const StudentProfile = () => {
 const styles = {
   container: {
     width: '100%',
-    padding: '1.25rem',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    boxSizing: 'border-box'
   },
-  name: { 
-    fontSize: 'clamp(1.5rem, 6vw, 2rem)', 
+  title: { 
+    fontSize: 'clamp(1.25rem, 5vw, 1.625rem)', 
     fontWeight: '800', 
+    marginBottom: '1rem', 
     color: '#0f172a',
-    letterSpacing: '-0.025em',
-    marginBottom: '4px'
+    letterSpacing: '-0.025em'
   },
-  subTitle: { 
-    fontSize: 'clamp(0.875rem, 4vw, 1rem)', 
-    color: '#64748b', 
-    marginBottom: '2rem',
-    fontWeight: '500',
-    lineHeight: '1.5'
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
-    gap: '1.5rem'
-  },
-  card: {
-    background: '#ffffff',
-    borderRadius: '1.5rem',
-    padding: 'clamp(1rem, 5vw, 1.75rem)',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03)',
-    border: '1px solid #f1f5f9',
-    height: 'fit-content',
-    boxSizing: 'border-box'
-  },
-  cardTitle: { 
-    fontSize: '0.8125rem', 
-    fontWeight: '700', 
-    marginBottom: '1.25rem', 
-    color: '#94a3b8',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em'
-  },
-  row: {
+  badgeRow: {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexWrap: 'wrap',
     gap: '0.75rem',
-    fontSize: '0.875rem',
-    padding: '0.75rem 0',
-    borderBottom: '1px solid #f8fafc'
+    alignItems: 'center',
+    marginBottom: '1.5rem'
   },
-  label: { 
-    color: '#64748b', 
-    fontWeight: '500',
-    flexShrink: 0 
-  },
-  value: { 
-    fontWeight: '700', 
-    color: '#1e293b',
-    textAlign: 'right',
-    wordBreak: 'break-word'
-  },
-  badge: {
-    padding: '0.375rem 0.75rem',
+  statusBadge: (isActive) => ({
+    padding: '0.375rem 0.875rem',
     borderRadius: '8px',
     fontSize: '0.75rem',
     fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: '0.025em',
-    whiteSpace: 'nowrap'
-  }
+    letterSpacing: '0.05em',
+    whiteSpace: 'nowrap',
+    background: isActive ? '#ecfdf5' : '#fff1f2',
+    color: isActive ? '#059669' : '#e11d48',
+    border: `1px solid ${isActive ? '#10b98133' : '#f43f5e33'}`
+  }),
+  smallMuted: { 
+    fontSize: '0.875rem', 
+    color: '#64748b',
+    fontWeight: '500'
+  },
+  card: {
+    background: '#ffffff',
+    borderRadius: '1.5rem',
+    padding: 'clamp(1.25rem, 5vw, 2rem)',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
+    border: '1px solid #f1f5f9',
+    width: '100%',
+    boxSizing: 'border-box'
+  },
+  cardHeading: { 
+    fontSize: 'clamp(1.25rem, 4vw, 1.5rem)', 
+    fontWeight: '800', 
+    marginBottom: '1.5rem', 
+    color: '#1e293b',
+    lineHeight: '1.3'
+  },
+  sectionTitle: { 
+    fontSize: '0.8125rem', 
+    fontWeight: '700', 
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    marginBottom: '0.5rem'
+  },
+  metaRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '0.5rem',
+    fontSize: '0.9375rem',
+    padding: '0.875rem 0',
+    borderBottom: '1px solid #f8fafc'
+  },
+  metaLabel: { 
+    color: '#64748b', 
+    fontWeight: '500',
+    flexShrink: 0
+  },
+  metaValue: { 
+    color: '#334155', 
+    fontWeight: '700',
+    textAlign: 'right',
+    wordBreak: 'break-word'
+  },
 };
-
 
 export default StudentProfile;

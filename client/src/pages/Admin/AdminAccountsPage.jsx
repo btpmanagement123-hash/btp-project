@@ -24,6 +24,7 @@ const AdminAccountsPage = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Account & User Management</h2>
+      <p style={styles.subtitle}>Manage and review user accounts information</p>
       
       {/* Statistics Section */}
       <div style={styles.topGrid}>
@@ -74,17 +75,20 @@ const AdminAccountsPage = () => {
 };
 
 const styles = {
-  container: {
-    padding: '16px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
+  container: { width: '100%', maxWidth: '100%' },
   title: { 
-    fontSize: 'clamp(20px, 5vw, 24px)', 
-    fontWeight: '700', 
-    marginBottom: '24px', 
-    color: '#111827',
+    fontSize: 'clamp(1.25rem, 5vw, 1.625rem)', 
+    fontWeight: '800', 
+    marginBottom: '0.5rem', 
+    color: '#0f172a',
     letterSpacing: '-0.025em'
+  },
+  subtitle: { 
+    fontSize: '0.875rem', 
+    color: '#64748b',
+    fontWeight: '500',
+    marginBottom: '1.5rem',
+    display: 'block'
   },
   topGrid: {
     display: 'grid',

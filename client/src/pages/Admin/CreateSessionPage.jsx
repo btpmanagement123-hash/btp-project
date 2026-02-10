@@ -105,7 +105,7 @@ const CreateSessionPage = () => {
         </div>
 
         <form onSubmit={handleSubmit} style={styles.form}>
-          <label style={styles.label}>Academic Session</label>
+          <label style={styles.sectionTitle}>Academic Session</label>
           <input
             style={styles.input}
             placeholder="e.g., 2025-2026"
