@@ -16,8 +16,10 @@ const StudentGroupInvitations = () => {
       ]);
       setMe(meRes.data);
       setGroups(grpRes.data || []);
+      setError('');
     } catch (err) {
       setError('Failed to load invitations. Please try again later.');
+      console.error('Load invitations error:', err);
     } finally {
       setLoading(false);
     }
@@ -28,160 +30,206 @@ const StudentGroupInvitations = () => {
   }, []);
 
   const respond = async (groupId, action) => {
-    // Confirm rejection to prevent accidental clicks
-    if (action === 'rejected' && !window.confirm('Are you sure you want to decline this invitation?')) return;
+    const actionText = action === 'accept' ? 'accept' : 'decline';
+    
+    if (action === 'reject' && !window.confirm('Are you sure you want to decline?')) {
+      return;
+    }
 
     setActionLoading(groupId + action);
     try {
       await api.post(`/student/group-requests/${groupId}/respond`, { action });
       await load();
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to submit response');
+      const errorMsg = err.response?.data?.message || `Failed to ${actionText} invitation`;
+      alert(errorMsg);
     } finally {
       setActionLoading('');
     }
   };
 
-  if (loading) return (
-    <div style={styles.page}>
-      <div style={styles.skeletonContainer}>
-        <div style={styles.skeletonTitle}></div>
-        <div style={styles.skeletonCard}></div>
+  if (loading) {
+    return (
+      <div style={styles.loadingContainer}>
+        <div style={styles.spinner}></div>
+        <p style={styles.smallMuted}>Loading invitations...</p>
       </div>
-    </div>
-  );
+    );
+  }
   
-  if (error) return (
-    <div style={styles.page}>
+  if (error) {
+    return (
       <div style={styles.errorBox}>
         <p>{error}</p>
         <button onClick={load} style={styles.retryBtn}>Retry</button>
       </div>
-    </div>
-  );
+    );
+  }
+
+  const userIdStr = String(me?._id);
+
+  // Groups where you are listed as "pending"
+  const myInvitations = groups.filter((g) => {
+    const myMember = g.members?.find(m => String(m.student?._id) === userIdStr);
+    return myMember && myMember.status === 'pending';
+  });
+
+  // Groups where you have already accepted/joined
+  const myJoinedGroups = groups.filter((g) => {
+    const myMember = g.members?.find(m => String(m.student?._id) === userIdStr);
+    return myMember && myMember.status === 'accepted';
+  });
 
   return (
-    <div style={styles.page}>
+    <div style={styles.container}>
       <h2 style={styles.title}>Group Invitations</h2>
-      <p style={styles.subtitle}>
-        Manage your Final Year Project (BTP) group invitations.
+      <p style={styles.smallMuted}>
+        Manage your project group invitations and track registration status.
       </p>
 
-      {groups.length === 0 ? (
-        <div style={styles.empty}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <p style={{ marginTop: '16px' }}>No pending invitations found.</p>
-        </div>
-      ) : (
-        groups.map((g) => {
-          const myMember = g.members.find(m => m.student._id === me?._id);
-          const canRespond = myMember && myMember.status === 'pending' && String(g.leader._id) !== String(me?._id);
-
-          return (
+      {/* Pending Invitations */}
+      {myInvitations.length > 0 && (
+        <div style={styles.section}>
+          <h3 style={styles.sectionTitle}>📩 Pending Invitations ({myInvitations.length})</h3>
+          {myInvitations.map((g) => (
             <div key={g._id} style={styles.card}>
-              <div style={styles.header}>
-                <div style={{ flex: 1 }}>
-                  <h3 style={styles.titleText}>{g.title || 'Untitled Project'}</h3>
-                  <div style={styles.metaRow}>
-                    <span style={styles.metaItem}><b>Supervisor:</b> {g.professor.name}</span>
-                  </div>
-                </div>
-                <span style={styles.badge}>{g.status.replace('_', ' ')}</span>
+              <div style={styles.badgeRow}>
+                <span style={styles.statusBadge(g.status)}>{g.status.replace('_', ' ')}</span>
+                <span style={styles.supervisorText}>
+                  Supervisor: <b style={{ color: '#1e293b' }}>{g.professor?.name || 'TBD'}</b>
+                </span>
               </div>
 
-              <div style={styles.membersBox}>
-                <span style={styles.memberTitle}>Group Members ({g.members.length})</span>
-                <div style={styles.memberList}>
-                  {g.members.map((m) => (
-                    <div key={m.student._id} style={styles.memberRow}>
-                      <div style={styles.memberInfo}>
-                        <div style={styles.avatar}>{m.student.name.charAt(0)}</div>
-                        <span style={styles.memberName}>{m.student.name}</span>
+              <h3 style={styles.cardHeading}>{g.title || 'Untitled Project'}</h3>
+              
+              <h4 style={styles.teamTitle}>Team Members ({g.members.length})</h4>
+              <div style={styles.teamList}>
+                {g.members.map((m) => (
+                  <div key={m.student._id} style={styles.teamChip}>
+                    <span style={styles.initial}>{m.student.name.charAt(0)}</span>
+                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                      <div style={styles.chipName}>
+                        {m.student.name} {String(m.student._id) === userIdStr && '(You)'}
                       </div>
-                      <span style={{
-                        ...styles.statusTag,
-                        backgroundColor: m.status === 'accepted' ? '#dcfce7' : m.status === 'rejected' ? '#fee2e2' : '#fef9c3',
-                        color: m.status === 'accepted' ? '#16a34a' : m.status === 'rejected' ? '#dc2626' : '#a16207'
-                      }}>
-                        {m.status}
-                      </span>
+                      <div style={styles.chipRoll}>{m.student.userId}</div>
+                      <div style={styles.statusText(m.status)}>{m.status}</div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
 
-              {canRespond && (
-                <div style={styles.actions}>
-                  <button
-                    disabled={!!actionLoading}
-                    onClick={() => respond(g._id, 'accepted')}
-                    style={{ ...styles.btn, background: '#16a34a' }}
-                  >
-                    {actionLoading === g._id + 'accepted' ? 'Processing...' : 'Accept Invitation'}
-                  </button>
-                  <button
-                    disabled={!!actionLoading}
-                    onClick={() => respond(g._id, 'rejected')}
-                    style={{ ...styles.btn, background: '#fff', color: '#dc2626', border: '1px solid #fecaca' }}
-                  >
-                    {actionLoading === g._id + 'rejected' ? 'Processing...' : 'Decline'}
-                  </button>
-                </div>
+              <div style={styles.actions}>
+                <button
+                  disabled={!!actionLoading}
+                  onClick={() => respond(g._id, 'accept')}
+                  style={{ ...styles.acceptBtn, opacity: actionLoading ? 0.6 : 1 }}
+                >
+                  {actionLoading === g._id + 'accept' ? 'Accepting...' : '✓ Accept'}
+                </button>
+                <button
+                  disabled={!!actionLoading}
+                  onClick={() => respond(g._id, 'reject')}
+                  style={{ ...styles.declineBtn, opacity: actionLoading ? 0.6 : 1 }}
+                >
+                  {actionLoading === g._id + 'reject' ? '...' : '✗ Decline'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Joined Groups */}
+      {myJoinedGroups.length > 0 && (
+        <div style={styles.section}>
+          <h3 style={styles.sectionTitle}>✓ My Groups ({myJoinedGroups.length})</h3>
+          {myJoinedGroups.map((g) => (
+            <div key={g._id} style={styles.infoCard}>
+              <div style={styles.badgeRow}>
+                <span style={styles.statusBadge(g.status)}>{g.status.replace('_', ' ')}</span>
+                <span style={styles.supervisorText}>
+                  Supervisor: <b style={{ color: '#1e293b' }}>{g.professor?.name || 'TBD'}</b>
+                </span>
+              </div>
+
+              <h3 style={styles.cardHeading}>{g.title || 'Untitled Project'}</h3>
+              
+              <div style={styles.teamList}>
+                {g.members.map((m) => (
+                  <div key={m.student._id} style={styles.teamChip}>
+                    <span style={styles.initial}>{m.student.name.charAt(0)}</span>
+                    <div style={{ flex: 1, overflow: 'hidden' }}>
+                      <div style={styles.chipName}>{m.student.name}</div>
+                      <div style={styles.statusText(m.status)}>{m.status}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {g.status === 'pending_members' && (
+                <div style={styles.waitingNotice}>⏳ Waiting for other members to accept</div>
+              )}
+              {g.status === 'pending_professor' && (
+                <div style={styles.waitingNotice}>⏳ Waiting for professor approval</div>
+              )}
+              {g.status === 'approved' && (
+                <div style={styles.successNotice}>✓ Group approved! Your team is official.</div>
+              )}
+              {g.status === 'rejected' && (
+                <div style={styles.rejectedNotice}>✗ This group request was rejected.</div>
               )}
             </div>
-          );
-        })
+          ))}
+        </div>
+      )}
+
+      {/* Empty State */}
+      {myInvitations.length === 0 && myJoinedGroups.length === 0 && (
+        <div style={styles.empty}>
+          <div style={styles.emptyIcon}>📭</div>
+          <p style={styles.emptyText}>No invitations found</p>
+        </div>
       )}
     </div>
   );
 };
 
 const styles = {
-  page: {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: 'clamp(16px, 5vw, 40px) 16px',
-    fontFamily: '"Inter", system-ui, sans-serif',
-  },
-  title: { fontSize: 'clamp(20px, 5vw, 28px)', fontWeight: '800', color: '#0f172a', marginBottom: '8px' },
-  subtitle: { fontSize: '14px', color: '#64748b', marginBottom: '32px' },
-  card: {
-    background: '#fff',
-    borderRadius: '20px',
-    padding: 'clamp(16px, 4vw, 24px)',
-    marginBottom: '20px',
-    border: '1px solid #e2e8f0',
-    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
-  },
-  header: { display: 'flex', justifyContent: 'space-between', gap: '16px', marginBottom: '20px' },
-  titleText: { fontSize: '18px', fontWeight: '700', color: '#1e293b', marginBottom: '8px' },
-  metaRow: { display: 'flex', flexWrap: 'wrap', gap: '12px', fontSize: '13px', color: '#64748b' },
-  badge: { 
-    background: '#eff6ff', color: '#2563eb', padding: '4px 10px', 
-    borderRadius: '6px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', height: 'fit-content'
-  },
-  membersBox: { background: '#f8fafc', borderRadius: '12px', padding: '16px' },
-  memberTitle: { fontSize: '12px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '12px', display: 'block' },
-  memberRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0' },
-  memberInfo: { display: 'flex', alignItems: 'center', gap: '10px' },
-  avatar: { width: '28px', height: '28px', background: '#e2e8f0', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '600' },
-  memberName: { fontSize: '14px', color: '#334155', fontWeight: '500' },
-  statusTag: { fontSize: '11px', fontWeight: '700', padding: '4px 8px', borderRadius: '4px', textTransform: 'uppercase' },
-  actions: { display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' },
-  btn: {
-    flex: 1, minWidth: '140px', padding: '12px', borderRadius: '10px', 
-    border: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '14px',
-    transition: 'all 0.2s', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', color: '#fff'
-  },
-  empty: { textAlign: 'center', padding: '60px 20px', color: '#94a3b8', background: '#f8fafc', borderRadius: '20px', border: '2px dashed #e2e8f0' },
-  errorBox: { textAlign: 'center', padding: '24px', background: '#fef2f2', borderRadius: '12px', border: '1px solid #fee2e2', color: '#b91c1c' },
-  retryBtn: { marginTop: '12px', padding: '8px 16px', background: '#dc2626', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' },
-  skeletonContainer: { opacity: 0.5 },
-  skeletonTitle: { height: '32px', width: '200px', background: '#e2e8f0', borderRadius: '8px', marginBottom: '20px' },
-  skeletonCard: { height: '200px', width: '100%', background: '#e2e8f0', borderRadius: '20px' }
+  container: { width: '100%', maxWidth: '100%' },
+  loadingContainer: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', gap: '16px' },
+  spinner: { width: '40px', height: '40px', border: '4px solid #f1f5f9', borderTop: '4px solid #4f46e5', borderRadius: '50%', animation: 'spin 1s linear infinite' },
+  title: { fontSize: 'clamp(1.25rem, 5vw, 1.625rem)', fontWeight: '800', marginBottom: '0.5rem', color: '#0f172a' },
+  smallMuted: { fontSize: '0.875rem', color: '#64748b', fontWeight: '500', marginBottom: '1.5rem', display: 'block' },
+  section: { marginBottom: '2.5rem' },
+  sectionTitle: { fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem' },
+  card: { background: '#ffffff', borderRadius: '1.5rem', padding: '1.5rem', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)', border: '2px solid #fbbf24', marginBottom: '1.5rem' },
+  infoCard: { background: '#ffffff', borderRadius: '1.5rem', padding: '1.5rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', border: '1px solid #f1f5f9', marginBottom: '1.5rem' },
+  badgeRow: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1rem', flexWrap: 'wrap' },
+  statusBadge: (status) => ({
+    padding: '0.375rem 0.875rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase',
+    background: status === 'approved' ? '#ecfdf5' : status === 'rejected' ? '#fee2e2' : '#f0f7ff',
+    color: status === 'approved' ? '#059669' : status === 'rejected' ? '#dc2626' : '#2563eb',
+  }),
+  supervisorText: { fontSize: '0.875rem', color: '#64748b' },
+  cardHeading: { fontSize: '1.25rem', fontWeight: '800', marginBottom: '1rem', color: '#1e293b' },
+  teamTitle: { fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '0.5rem' },
+  teamList: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '0.75rem' },
+  teamChip: { display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', borderRadius: '1rem', background: '#f8fafc', border: '1px solid #f1f5f9' },
+  initial: { width: '32px', height: '32px', borderRadius: '8px', background: '#6366f1', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' },
+  chipName: { fontSize: '0.875rem', fontWeight: '700', color: '#1e293b' },
+  chipRoll: { fontSize: '0.75rem', color: '#64748b' },
+  statusText: (status) => ({ fontSize: '0.75rem', fontWeight: '600', color: status === 'accepted' ? '#16a34a' : '#a16207' }),
+  actions: { display: 'flex', gap: '10px', marginTop: '1.5rem' },
+  acceptBtn: { flex: 1, background: '#16a34a', color: '#fff', border: 'none', padding: '10px', borderRadius: '10px', fontWeight: '700', cursor: 'pointer' },
+  declineBtn: { background: '#fff', color: '#dc2626', border: '1px solid #fecaca', padding: '10px 20px', borderRadius: '10px', fontWeight: '700', cursor: 'pointer' },
+  waitingNotice: { marginTop: '1rem', padding: '10px', background: '#fffbeb', color: '#92400e', borderRadius: '8px', fontSize: '0.875rem' },
+  successNotice: { marginTop: '1rem', padding: '10px', background: '#f0fdf4', color: '#15803d', borderRadius: '8px', fontSize: '0.875rem' },
+  rejectedNotice: { marginTop: '1rem', padding: '10px', background: '#fef2f2', color: '#991b1b', borderRadius: '8px', fontSize: '0.875rem' },
+  empty: { textAlign: 'center', padding: '3rem', background: '#f8fafc', borderRadius: '1.5rem', border: '2px dashed #e2e8f0' },
+  emptyIcon: { fontSize: '2.5rem', marginBottom: '1rem' },
+  emptyText: { color: '#64748b', fontWeight: '600' },
+  errorBox: { padding: '1.5rem', background: '#fef2f2', color: '#b91c1c', borderRadius: '12px', textAlign: 'center' },
+  retryBtn: { marginTop: '1rem', background: '#dc2626', color: '#fff', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer' }
 };
 
 export default StudentGroupInvitations;

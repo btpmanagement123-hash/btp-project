@@ -5,6 +5,7 @@ const ProfessorDashboard = () => {
   const [btpConfig, setBtpConfig] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [pubCount, setPubCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
@@ -18,53 +19,82 @@ const ProfessorDashboard = () => {
         setNotifications(nRes.data.slice(0, 3));
         setPubCount(pRes.data.length);
       } catch (err) {
-        // optional error handling
+        console.error('dashboard load error', err);
+      } finally {
+        setLoading(false);
       }
     };
     load();
   }, []);
 
-  return (
-    <div>
-      <h2 style={styles.title}>Notifications</h2>
+  const formatTimestamp = (dateStr) => {
+    if (!dateStr) return 'Recent';
+    const date = new Date(dateStr);
+    const d = date.toLocaleDateString('en-GB', { 
+      day: '2-digit', month: 'short', year: 'numeric' 
+    });
+    const t = date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', minute: '2-digit', hour12: true 
+    });
+    return `${d} • ${t}`;
+  };
 
+  if (loading) return <p style={styles.smallMuted}>Loading dashboard...</p>;
+
+  return (
+    <div style={styles.container}>
+      {/* Notifications Section */}
+      <h2 style={styles.title}>Recent Notifications</h2>
+      <p style={styles.smallMuted}>Stay updated with student requests and system alerts.</p>
+      
       <div style={styles.cardsCol}>
         {notifications.map(n => (
-          <div key={n._id} style={styles.notificationCard}>
-            <h3 style={styles.notifTitle}>{n.title}</h3>
+          <div key={n._id} style={styles.notifCard}>
+            <h3 style={styles.cardHeadingSmall}>{n.title}</h3>
             <p style={styles.notifMsg}>{n.message}</p>
+            <div style={styles.timestampContainer}>
+              <span style={styles.timestampText}>
+                {formatTimestamp(n.createdAt)}
+              </span>
+            </div>
           </div>
         ))}
         {notifications.length === 0 && (
-          <p style={styles.empty}>No notifications for now.</p>
+          <div style={styles.empty}>No new notifications.</div>
         )}
       </div>
 
-      <h3 style={{ ...styles.title, marginTop: 24 }}>BTP Summary</h3>
-      <div style={styles.summaryRow}>
+      {/* BTP Summary Section */}
+      <h2 style={{ ...styles.title, marginTop: '3rem' }}>BTP Summary</h2>
+      <p style={styles.smallMuted}>Overview of current project configurations and output.</p>
+      
+      <div style={styles.summaryGrid}>
         <div style={styles.summaryCard}>
-          <p style={styles.summaryLabel}>Max Members / Group</p>
-          <p style={styles.summaryValue}>
-            {btpConfig?.maxMembersPerGroup || '-'}
-          </p>
+          <p style={styles.sectionTitle}>Group Policy</p>
+          <div style={styles.metaRow}>
+            <span style={styles.metaLabel}>Max Members</span>
+            <span style={styles.metaValue}>{btpConfig?.maxMembersPerGroup || '-'}</span>
+          </div>
+          <div style={styles.metaRow}>
+            <span style={styles.metaLabel}>Max Groups</span>
+            <span style={styles.metaValue}>{btpConfig?.maxSupervisorsPerGroup || '-'}</span>
+          </div>
         </div>
+
         <div style={styles.summaryCard}>
-          <p style={styles.summaryLabel}>Max Groups / Supervisor</p>
-          <p style={styles.summaryValue}>
-            {btpConfig?.maxSupervisorsPerGroup || '-'}
-          </p>
-        </div>
-        <div style={styles.summaryCard}>
-          <p style={styles.summaryLabel}>Registration Deadline</p>
-          <p style={styles.summaryValue}>
-            {btpConfig?.registrationDeadline
-              ? new Date(btpConfig.registrationDeadline).toLocaleDateString()
-              : 'Not set'}
-          </p>
-        </div>
-        <div style={styles.summaryCard}>
-          <p style={styles.summaryLabel}>Publications (total)</p>
-          <p style={styles.summaryValue}>{pubCount}</p>
+          <p style={styles.sectionTitle}>Timeline & Research</p>
+          <div style={styles.metaRow}>
+            <span style={styles.metaLabel}>Deadline</span>
+            <span style={styles.metaValue}>
+              {btpConfig?.registrationDeadline
+                ? new Date(btpConfig.registrationDeadline).toLocaleDateString()
+                : 'Not set'}
+            </span>
+          </div>
+          <div style={styles.metaRow}>
+            <span style={styles.metaLabel}>Total Publications</span>
+            <span style={styles.metaValue}>{pubCount}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -72,101 +102,101 @@ const ProfessorDashboard = () => {
 };
 
 const styles = {
-  // Main Heading
+  container: { 
+    width: '100%', 
+    maxWidth: '100%' 
+  },
   title: { 
-    fontSize: 'clamp(20px, 5vw, 24px)', // Responsive text
+    fontSize: 'clamp(1.25rem, 5vw, 1.625rem)', 
     fontWeight: '800', 
-    color: '#0f172a', 
-    marginBottom: '24px',
-    letterSpacing: '-0.025em' 
+    marginBottom: '0.5rem', 
+    color: '#0f172a',
+    letterSpacing: '-0.025em'
   },
-
-  // Summary Grid (Top stats)
-  summaryRow: {
-    display: 'grid',
-    // Adapts from 1 column on mobile to many on desktop automatically
-    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
-    gap: 'clamp(12px, 3vw, 20px)',
-    marginBottom: '32px'
+  smallMuted: { 
+    fontSize: '0.875rem', 
+    color: '#64748b',
+    fontWeight: '500',
+    marginBottom: '1.5rem',
+    display: 'block'
   },
-
-  summaryCard: {
-    background: '#ffffff',
-    borderRadius: '20px',
-    padding: '24px',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.04)',
-    border: '1px solid #f1f5f9',
-    display: 'flex',
-    flexDirection: 'column',
-    transition: 'all 0.2s ease-in-out',
-    boxSizing: 'border-box',
-    // Hover effect for interactivity
-    ':hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)'
-    }
-  },
-
-  summaryLabel: { 
-    fontSize: '12px', 
-    fontWeight: '700', 
-    color: '#64748b', 
-    textTransform: 'uppercase', 
-    letterSpacing: '0.05em' 
-  },
-
-  summaryValue: { 
-    fontSize: 'clamp(24px, 4vw, 32px)', 
-    fontWeight: '800', 
-    color: '#0f172a', 
-    marginTop: '4px',
-    fontVariantNumeric: 'tabular-nums'
-  },
-
-  // Notifications List
   cardsCol: { 
     display: 'flex', 
     flexDirection: 'column', 
-    gap: '12px',
+    gap: '1rem', 
     width: '100%'
   },
-
-  notificationCard: {
+  notifCard: {
     background: '#ffffff',
-    borderRadius: '16px',
-    padding: 'clamp(16px, 3vw, 20px)',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+    borderRadius: '1.5rem',
+    padding: 'clamp(1.25rem, 5vw, 1.75rem)',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
     border: '1px solid #f1f5f9',
-    borderLeft: '4px solid #6366f1', // Indigo accent
-    display: 'flex',
-    flexDirection: 'column',
+    borderLeft: '6px solid #6366f1',
     boxSizing: 'border-box',
-    transition: 'background 0.2s ease'
+    display: 'flex',
+    flexDirection: 'column'
   },
-
-  notifTitle: { 
-    fontSize: '15px', 
-    fontWeight: '700', 
-    color: '#1e293b', 
-    marginBottom: '4px' 
+  cardHeadingSmall: { 
+    fontSize: '1.125rem', 
+    fontWeight: '800', 
+    marginBottom: '0.375rem', 
+    color: '#1e293b' 
   },
-
   notifMsg: { 
-    fontSize: '14px', 
+    fontSize: '0.9375rem', 
     color: '#64748b', 
     lineHeight: '1.6',
-    wordBreak: 'break-word' // Prevents long text from breaking layout
+    margin: 0
   },
-
+  timestampContainer: {
+    marginTop: '1rem',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  timestampText: {
+    fontSize: '0.75rem',
+    color: '#94a3b8',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em'
+  },
+  summaryGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 350px), 1fr))',
+    gap: '1.5rem'
+  },
+  summaryCard: {
+    background: '#ffffff',
+    borderRadius: '1.5rem',
+    padding: '2rem',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
+    border: '1px solid #f1f5f9'
+  },
+  sectionTitle: { 
+    fontSize: '0.8125rem', 
+    fontWeight: '700', 
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    marginBottom: '1rem'
+  },
+  metaRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '0.875rem 0',
+    borderBottom: '1px solid #f8fafc',
+    fontSize: '0.9375rem'
+  },
+  metaLabel: { color: '#64748b', fontWeight: '500' },
+  metaValue: { color: '#334155', fontWeight: '800', fontSize: '1.125rem' },
   empty: { 
-    fontSize: '14px', 
+    textAlign: 'center', 
+    padding: '3rem', 
+    background: '#f8fafc', 
+    borderRadius: '1.5rem', 
     color: '#94a3b8', 
-    padding: '40px 20px',
-    textAlign: 'center',
-    background: '#f8fafc',
-    borderRadius: '16px',
-    border: '2px dashed #e2e8f0',
-    marginTop: '8px'
+    border: '2px dashed #e2e8f0' 
   }
 };
 

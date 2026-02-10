@@ -20,7 +20,7 @@ const AdminNotifications = () => {
         message,
         validTill: validTill || null
       });
-      setInfo('Notification created');
+      setInfo('Notification created successfully');
       setTitle('');
       setMessage('');
       setValidTill('');
@@ -30,152 +30,184 @@ const AdminNotifications = () => {
   };
 
   return (
-    <div style={styles.wrapper}>
-      <h2 style={styles.title}>Create Notification</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.row}>
-          <div style={styles.col}>
-            <label style={styles.label}>Audience</label>
-            <select
-              value={audience}
-              onChange={e => setAudience(e.target.value)}
-              style={styles.input}
-            >
-              <option value="all">All</option>
-              <option value="students">Students</option>
-              <option value="faculty">Faculty</option>
-            </select>
+    <div style={styles.container}>
+      <h2 style={styles.pageTitle}>Notifications</h2>
+      <p style={styles.smallMuted}>Create and broadcast alerts for the system.</p>
+      
+      <div style={styles.card}>
+        <h3 style={styles.cardHeading}>Compose Broadcast</h3>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <div style={styles.row}>
+            <div style={styles.col}>
+              <label style={styles.label}>Audience</label>
+              <select
+                value={audience}
+                onChange={e => setAudience(e.target.value)}
+                style={styles.input}
+              >
+                <option value="all">Global (All Users)</option>
+                <option value="students">Students Only</option>
+                <option value="faculty">Faculty Only</option>
+              </select>
+            </div>
+            
+            <div style={styles.col}>
+              <label style={styles.label}>Academic Session</label>
+              <input
+                style={styles.input}
+                placeholder="e.g. 2025-2026"
+                value={session}
+                onChange={e => setSession(e.target.value)}
+              />
+            </div>
+
+            <div style={styles.col}>
+              <label style={styles.label}>Valid Until</label>
+              <input
+                type="date"
+                style={styles.input}
+                value={validTill}
+                onChange={e => setValidTill(e.target.value)}
+              />
+            </div>
           </div>
-          <div style={styles.col}>
-            <label style={styles.label}>Session (optional)</label>
+
+          <div>
+            <label style={styles.label}>Notification Title</label>
             <input
               style={styles.input}
-              placeholder="2025-2026"
-              value={session}
-              onChange={e => setSession(e.target.value)}
+              placeholder="e.g. Registration Deadline Extended"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              required
             />
           </div>
-          <div style={styles.col}>
-            <label style={styles.label}>Valid till (optional)</label>
-            <input
-              type="date"
-              style={styles.input}
-              value={validTill}
-              onChange={e => setValidTill(e.target.value)}
+
+          <div>
+            <label style={styles.label}>Detailed Message</label>
+            <textarea
+              rows={4}
+              style={{ ...styles.input, resize: 'none' }}
+              placeholder="Enter the full content of your announcement..."
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+              required
             />
           </div>
-        </div>
 
-        <div>
-          <label style={styles.label}>Title</label>
-          <input
-            style={styles.input}
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            required
-          />
-        </div>
+          {info && (
+            <div style={info.includes('success') ? styles.successMsg : styles.errorMsg}>
+              {info}
+            </div>
+          )}
 
-        <div>
-          <label style={styles.label}>Message</label>
-          <textarea
-            rows={3}
-            style={{ ...styles.input, resize: 'vertical' }}
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-            required
-          />
-        </div>
-
-        {info && <p style={styles.msg}>{info}</p>}
-
-        <button type="submit" style={styles.btn}>
-          Save Notification
-        </button>
-      </form>
+          <button type="submit" style={styles.btn}>
+            Broadcast Notification
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
 
 const styles = {
-  wrapper: {
+  container: { 
+    width: '100%', 
+    maxWidth: '100%' 
+  },
+  pageTitle: { 
+    fontSize: 'clamp(1.25rem, 5vw, 1.625rem)', 
+    fontWeight: '800', 
+    marginBottom: '0.5rem', 
+    color: '#0f172a',
+    letterSpacing: '-0.025em'
+  },
+  smallMuted: { 
+    fontSize: '0.875rem', 
+    color: '#64748b',
+    fontWeight: '500',
+    marginBottom: '2rem',
+    display: 'block'
+  },
+  card: {
     background: '#ffffff',
-    borderRadius: '20px',
-    padding: 'clamp(16px, 5vw, 32px)', 
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+    borderRadius: '1.5rem',
+    padding: 'clamp(1.5rem, 5vw, 2.5rem)',
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
     border: '1px solid #f1f5f9',
-    maxWidth: '800px',
-    margin: '20px auto', 
-    width: 'calc(100% - 32px)',
     boxSizing: 'border-box'
   },
-  title: { 
-    fontSize: 'clamp(18px, 4vw, 22px)', 
-    fontWeight: '700', 
-    marginBottom: '24px', 
-    color: '#0f172a',
-    letterSpacing: '-0.02em',
-    textAlign: 'left'
+  cardHeading: {
+    fontSize: '1.125rem',
+    fontWeight: '800',
+    color: '#1e293b',
+    marginBottom: '1.5rem'
   },
   form: { 
     display: 'flex', 
     flexDirection: 'column', 
-    gap: '20px' 
+    gap: '1.25rem' 
   },
   row: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '20px',
-    width: '100%'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '1.25rem'
   },
   col: { 
     display: 'flex', 
     flexDirection: 'column', 
-    gap: '6px' 
+    gap: '0.5rem' 
   },
   label: { 
-    fontSize: '13px', 
-    fontWeight: '600', 
+    fontSize: '0.8125rem', 
+    fontWeight: '700', 
     color: '#64748b',
-    marginLeft: '4px' 
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em'
   },
   input: {
-    padding: '12px 16px',
-    borderRadius: '10px',
+    padding: '0.875rem 1rem',
+    borderRadius: '12px',
     border: '1px solid #e2e8f0',
-    fontSize: '16px', 
+    fontSize: '0.9375rem', 
     color: '#1e293b',
-    background: '#fcfcfd',
+    background: '#f8fafc',
     outline: 'none',
-    transition: 'all 0.2s ease',
+    transition: 'border-color 0.2s ease',
     width: '100%',
     boxSizing: 'border-box'
   },
-  msg: { 
-    fontSize: '14px', 
+  successMsg: { 
+    fontSize: '0.875rem', 
     color: '#059669',
     background: '#ecfdf5',
-    padding: '12px 16px',
-    borderRadius: '8px',
-    border: '1px solid #d1fae5',
-    textAlign: 'center',
-    fontWeight: '500',
-    wordBreak: 'break-word' 
+    padding: '1rem',
+    borderRadius: '12px',
+    border: '1px solid #10b98133',
+    fontWeight: '600'
+  },
+  errorMsg: { 
+    fontSize: '0.875rem', 
+    color: '#dc2626',
+    background: '#fef2f2',
+    padding: '1rem',
+    borderRadius: '12px',
+    border: '1px solid #fecaca',
+    fontWeight: '600'
   },
   btn: {
-    marginTop: '12px',
-    padding: '14px',
-    borderRadius: '10px',
+    marginTop: '0.5rem',
+    padding: '1rem',
+    borderRadius: '12px',
     border: 'none',
-    background: '#0f172a', 
+    background: '#6366f1', 
     color: '#ffffff',
-    fontSize: '15px',
-    fontWeight: '600',
+    fontSize: '1rem',
+    fontWeight: '700',
     cursor: 'pointer',
-    transition: 'background 0.2s ease',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-    width: '100%', 
-    WebkitTapHighlightColor: 'transparent' 
+    transition: 'transform 0.1s ease, background 0.2s ease',
+    boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.3)',
+    width: '100%'
   }
 };
 

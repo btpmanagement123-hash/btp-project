@@ -60,8 +60,9 @@ const ProfessorPublications = () => {
   };
 
   return (
-    <div>
+    <div style={styles.container}>
       <h2 style={styles.title}>Publications</h2>
+      <p style={styles.smallMuted}>Add publication record of supervised groups.</p>
 
       <form onSubmit={handleAdd} style={styles.form}>
         <input
@@ -150,12 +151,20 @@ const ProfessorPublications = () => {
 };
 
 const styles = {
+  container: { width: '100%', maxWidth: '100%' },
   title: { 
-    fontSize: '26px', 
+    fontSize: 'clamp(1.25rem, 5vw, 1.625rem)', 
     fontWeight: '800', 
-    color: '#0f172a', 
-    letterSpacing: '-0.025em',
-    marginBottom: '20px' 
+    marginBottom: '0.5rem', 
+    color: '#0f172a',
+    letterSpacing: '-0.025em' 
+  },
+  smallMuted: { 
+    fontSize: '0.875rem', 
+    color: '#64748b',
+    fontWeight: '500',
+    marginBottom: '2rem',
+    display: 'block'
   },
   form: {
     display: 'grid',

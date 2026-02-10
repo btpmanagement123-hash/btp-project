@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import nsutLogo from '../../assets/nsutlogo.png';
 
 const ProfessorLayout = () => {
-  const { user, logout } = useAuth(); // Assuming 'user' is available for name display
+  const { logout } = useAuth(); 
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
@@ -42,7 +42,6 @@ const ProfessorLayout = () => {
       }}>
         <div style={styles.logoWrapper}>
           <img src={nsutLogo} alt="NSUT" style={styles.logo} />
-          <span style={styles.logoText}>Professor</span>
         </div>
 
         <nav style={styles.nav}>
@@ -85,12 +84,7 @@ const ProfessorLayout = () => {
           </div>
           
           <div style={styles.headerRight}>
-            {!isMobile && (
-              <div style={styles.userInfo}>
-                <span style={styles.userName}>{user?.name || 'Professor'}</span>
-                <span style={styles.userRole}>Faculty</span>
-              </div>
-            )}
+          
             
             <button onClick={handleLogout} style={styles.logoutBtn}>
               Logout
@@ -229,20 +223,6 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '20px'
-  },
-  userInfo: {
-    display: 'flex',
-    flexDirection: 'column',
-    textAlign: 'right',
-  },
-  userName: {
-    fontSize: '14px',
-    fontWeight: '600',
-    color: '#1e293b'
-  },
-  userRole: {
-    fontSize: '12px',
-    color: '#64748b'
   },
   logoutBtn: {
     padding: '8px 18px',

@@ -46,7 +46,7 @@ const AdminManageAccounts = () => {
 
   return (
     <div style={styles.wrapper}>
-      <h2 style={styles.title}>Manage Accounts</h2>
+      <h2 style={styles.title}>Accounts Information</h2>
 
       {/* Filters */}
       <div style={styles.filtersRow}>

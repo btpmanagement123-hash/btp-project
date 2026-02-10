@@ -5,8 +5,9 @@ const AdminSettingsHome = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div style={styles.container}>
       <h2 style={styles.title}>System Configuration</h2>
+      <p style={styles.subtitle}>Manage session information and BTP configuration</p>
       <div style={styles.grid}>
         <div style={styles.card} onClick={() => navigate('/admin/settings/create-session')}>
           <div style={styles.icon}>📅</div>
@@ -28,13 +29,23 @@ const AdminSettingsHome = () => {
 };
 
 const styles = {
+  container: { 
+    width: '100%', 
+    maxWidth: '100%' 
+  },
   title: { 
-    fontSize: 'clamp(20px, 5vw, 24px)', 
-    fontWeight: '700', 
-    marginBottom: '28px', 
+    fontSize: 'clamp(1.25rem, 5vw, 1.625rem)', 
+    fontWeight: '800', 
+    marginBottom: '0.5rem', 
     color: '#0f172a',
-    letterSpacing: '-0.02em',
-    padding: '0 4px'
+    letterSpacing: '-0.025em'
+  },
+  subtitle: { 
+    fontSize: '0.875rem', 
+    color: '#64748b',
+    fontWeight: '500',
+    marginBottom: '1.5rem',
+    display: 'block'
   },
   grid: {
     display: 'grid',
