@@ -8,6 +8,7 @@ import AdminLoginPage from './pages/Auth/AdminLoginPage';
 
 // Student
 import StudentLayout from './pages/Student/StudentLayout';
+import StudentDashboard from './pages/Student/StudentDashboard';
 import StudentNotifications from './pages/Student/StudentNotifications';
 import StudentProfile from './pages/Student/StudentProfile';
 import StudentProjectRegistration from './pages/Student/StudentProjectRegistration';
@@ -100,12 +101,13 @@ const AppRoutes = () => (
         </PrivateRoute>
       }
     >
-      <Route index element={<StudentNotifications />} />
-      <Route path="profile" element={<StudentProfile />} />
-      <Route path="project/registration" element={<StudentProjectRegistration />} />
-      <Route path="project/overview" element={<StudentProjectOverview />} />
-      <Route path="change-password" element={<StudentChangePassword />} />
-      <Route path="project/invitations" element={<StudentGroupInvitations />} />
+      <Route index element={<StudentDashboard />} />
+<Route path="notifications" element={<StudentNotifications />} />
+<Route path="profile" element={<StudentProfile />} />
+<Route path="project/registration" element={<StudentProjectRegistration />} />
+<Route path="project/overview" element={<StudentProjectOverview />} />
+<Route path="change-password" element={<StudentChangePassword />} />
+<Route path="project/invitations" element={<StudentGroupInvitations />} />
     </Route>
 
     {/* Professor nested routes */}

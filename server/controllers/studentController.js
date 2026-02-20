@@ -1,20 +1,4 @@
-// // server/controllers/studentController.js
-// import User from '../models/User.js';
-// import Notification from '../models/Notification.js';
 
-// export const getStudentMe = async (req, res) => {
-//   const user = await User.findById(req.user._id).select('-password');
-//   res.json(user);
-// };
-
-// export const getStudentNotifications = async (req, res) => {
-//   const notes = await Notification.find({
-//     $or: [{ targetRole: 'student' }, { targetRole: 'all' }],
-//     session: req.user.session
-//   }).sort({ createdAt: -1 });
-
-//   res.json(notes);
-// };
 // server/controllers/studentController.js
 import User from '../models/User.js';
 import Notification from '../models/Notification.js';
@@ -41,14 +25,29 @@ export const getStudentNotifications = async (req, res) => {
 
 
 export const getStudentBtpConfig = async (req, res) => {
-  const cfg = await SessionConfig.findOne({
-    session: req.user.session,
-    status: 'active'
-  });
+  try {
+    const activeSession = await SessionConfig.findOne({
+      status: 'active'
+    });
 
-  if (!cfg) return res.json({ maxGroupSize: 3 });
+    if (!activeSession) {
+      return res.json({
+        maxMembersPerGroup: null,
+        maxSupervisorsPerGroup: null,
+        registrationDeadline: null
+      });
+    }
 
-  res.json({
-    maxGroupSize: cfg.config?.maxGroupSize || 3
-  });
+    const cfg = activeSession.config || {};
+
+    res.json({
+      maxMembersPerGroup: cfg.maxGroupSize || null,
+      maxSupervisorsPerGroup: cfg.maxGroupsPerProfessor || null,
+      registrationDeadline: cfg.registrationDeadline || null
+    });
+
+  } catch (err) {
+    console.error("getStudentBtpConfig error:", err);
+    res.status(500).json({ message: err.message });
+  }
 };

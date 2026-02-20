@@ -1,42 +1,4 @@
-// import express from 'express';
-// const router = express.Router();
 
-// router.get('/groups', (req, res) => {
-//   res.json({ groups: [] });
-// });
-
-// router.put('/groups/:id/approve', (req, res) => {
-//   res.json({ success: true, message: 'Group approved!' });
-// });
-
-// router.put('/groups/:id/reject', (req, res) => {
-//   res.json({ success: true, message: 'Group rejected!' });
-// });
-
-// export default router;
-// import express from 'express';
-// import { protect, authorize } from '../middleware/auth.js';
-// import { getMyNotifications } from '../controllers/notificationController.js';
-// import { getBtpConfigForUser } from '../controllers/btpController.js';
-// import {
-//   createPublication,
-//   getMyPublications,
-//   deletePublication
-// } from '../controllers/publicationController.js';
-
-// const router = express.Router();
-
-// router.use(protect, authorize('professor'));
-
-// router.get('/notifications', getMyNotifications);
-// router.get('/btp-config', getBtpConfigForUser);
-
-// // Publications
-// router.get('/publications', getMyPublications);
-// router.post('/publications', createPublication);
-// router.delete('/publications/:id', deletePublication);
-
-// export default router;
 // server/routes/professor.js
 import express from 'express';
 import { protect, authorize } from '../middleware/auth.js';
