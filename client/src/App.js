@@ -35,13 +35,52 @@ import AdminUploadFaculty from './pages/Admin/AdminUploadFaculty';
 import AdminManageAccounts from './pages/Admin/AdminManageAccounts';
 import AdminNotifications from './pages/Admin/AdminNotifications';
 import StudentGroupInvitations from './pages/Student/StudentGroupInvitations';
+// const PrivateRoute = ({ children, roles }) => {
+//   const { user } = useAuth();
+//   const path = window.location.pathname;
+
+//   if (!user) return <Navigate to="/login" replace />;
+
+//   if (roles && !roles.includes(user.role)) {
+//     return <Navigate to="/login" replace />;
+//   }
+
+//   // Force change password for professors
+//   if (
+//     user.mustChangePassword &&
+//     user.role === 'professor' &&
+//     !path.startsWith('/professor/change-password')
+//   ) {
+//     return <Navigate to="/professor/change-password" replace />;
+//   }
+
+//   // Force change password for students
+//   if (
+//     user.mustChangePassword &&
+//     user.role === 'student' &&
+//     !path.startsWith('/student/change-password')
+//   ) {
+//     return <Navigate to="/student/change-password" replace />;
+//   }
+
+//   return children;
+// };
 const PrivateRoute = ({ children, roles }) => {
   const { user } = useAuth();
   const path = window.location.pathname;
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) {
+    // 🔥 If admin route, redirect to admin login
+    if (path.startsWith('/admin')) {
+      return <Navigate to="/admin123" replace />;
+    }
+    return <Navigate to="/login" replace />;
+  }
 
   if (roles && !roles.includes(user.role)) {
+    if (roles.includes('admin')) {
+      return <Navigate to="/admin123" replace />;
+    }
     return <Navigate to="/login" replace />;
   }
 
@@ -65,7 +104,6 @@ const PrivateRoute = ({ children, roles }) => {
 
   return children;
 };
-
 const AppRoutes = () => (
   <Routes>
     {/* Public logins */}

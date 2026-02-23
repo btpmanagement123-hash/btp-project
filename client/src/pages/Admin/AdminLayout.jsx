@@ -19,10 +19,10 @@ const AdminLayout = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+  const handleLogout = async () => {
+  await logout();
+  navigate('/admin123', { replace: true });
+};
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
