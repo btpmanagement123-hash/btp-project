@@ -1,6 +1,7 @@
 import { chatWithAdvisor } from "../utils/chatbotService.js";
 import ChatHistory from "../models/ChatHistory.js";
 import facultyData from "../utils/facultyData.js";
+import Group from "../models/Group.js";
 
 // @desc    Create a new chat session
 // @route   POST /api/chat/session
@@ -68,9 +69,28 @@ export const sendMessage = async (req, res, next) => {
       parts: msg.content,
     }));
 
-    // ─── Call Gemini Advisor ───
-    const { reply } = await chatWithAdvisor(question, geminiHistory, facultyData);
+    // ─── Check if user is already part of a group ───
+    const existingGroup = await Group.findOne({
+      members: req.user._id,
+      status: { $in: ["pending", "approved"] } // optional condition
+    });
 
+
+    if (existingGroup) {
+        geminiHistory.unshift({
+          role: "user",
+          parts:
+            "System instruction: The user is already part of a project group. Politely mention this once before answering."
+        });
+    }
+
+    // ─── Call Gemini Advisor ───
+    const { reply } = await chatWithAdvisor(
+      question,
+      geminiHistory,
+      facultyData
+    );
+    
     // ─── Parse structured projects from new format ───
     const projects = parseProjectsFromMarkdown(reply);
 
