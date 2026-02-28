@@ -51,7 +51,6 @@ const StudentLayout = () => {
       }}>
         <div style={styles.logoWrapper}>
           <img src={nsutLogo} alt="NSUT" style={styles.logo} />
-          <span style={styles.logoText}>Student</span>
         </div>
 
         <nav style={styles.nav}>
@@ -75,6 +74,10 @@ const StudentLayout = () => {
 
           <NavLink to="/student/project/invitations" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
             Invitations
+          </NavLink>
+
+          <NavLink to="/student/projectadvisorbot" style={styles.navItem} onClick={() => setIsMenuOpen(false)}>
+            Chat Bot
           </NavLink>
 
           <div style={styles.sectionLabel}>Account</div>
@@ -150,11 +153,6 @@ const styles = {
     padding: '0 24px',
     borderBottom: '1px solid #1e293b',
     gap: '12px'
-  },
-  logoText: {
-    fontSize: '18px',
-    fontWeight: '700',
-    color: '#fff'
   },
   logo: { 
     height: 40, 
